@@ -5,9 +5,9 @@ Makes your live easier optimizing for retina displays.
 How it works
 ------------
 
-Automatically generates retina versions of your uploaded images (with CarrierWave or Paperclip). It detects with javascript if a visitor has a retina display. If so it displays the @2x version of the image.
+Retina Rails automatically generates retina versions of your uploaded images (with CarrierWave or Paperclip). It detects with javascript if a visitor has a retina display and if so it displays the @2x version.
 
-Note: It also works for image files that live in assets/images
+Note: It also works for images that live in assets/images
 
 Installation
 ------------
@@ -57,7 +57,7 @@ Voila! Now you're using Retina Rails.
 Credits
 ------------
 
-Retina rails uses retinajs (https://github.com/imulus/retinajs)
+Retina Rails uses retinajs (https://github.com/imulus/retinajs)
 
 Note on Patches/Pull Requests
 ------------
