@@ -1,11 +1,11 @@
 ## Retina Rails [![Build Status](https://secure.travis-ci.org/jhnvz/retina_rails.png?branch=master)](http://travis-ci.org/jhnvz/retina_rails)
 
-Makes your live easier optimizing for retina displays.
+Makes your live easier optimizing an application for retina displays.
 
 How it works
 ------------
 
-Retina Rails automatically generates retina versions of your uploaded images (with CarrierWave or Paperclip). It detects with javascript if a visitor has a retina display and if so it displays the @2x version.
+Retina Rails automatically generates retina versions of your uploaded images (CarrierWave or Paperclip). It detects if a visitor has a retina display and if so it displays the @2x version.
 
 Note: It also works for images that live in assets/images
 
