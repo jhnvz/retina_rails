@@ -9,7 +9,8 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Johan van Zonneveld"]
   gem.email         = ["johan@vzonneveld.nl"]
   gem.homepage      = 'https://github.com/jhnvz/retina_rails.git'
-  gem.summary       = %q{Automatically generates retina versions of your uploaded images}
+  gem.summary       = %q{Makes your live easier optimizing for retina displays}
+  gem.description   = %q{Retina Rails automatically generates retina versions of your uploaded images (with CarrierWave or Paperclip). It detects with javascript if a visitor has a retina display and if so it displays the @2x version}
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
