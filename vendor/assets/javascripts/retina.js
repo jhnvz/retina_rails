@@ -33,7 +33,7 @@
         }
       }
       existing_onload();
-    }
+    };
   };
 
   Retina.isRetina = function(){
@@ -56,14 +56,14 @@
 
   function RetinaImagePath(path) {
     this.path = path;
-    this.at_2x_path = path.replace(/\.\w+$/, function(match) { return "@2x" + match; });
+    this.at_2x_path = path.replace(/(?:-[a-f0-9]{32})?(\.\w+)$/, function(match) { return "@2x" + match; });
   }
 
   RetinaImagePath.confirmed_paths = [];
 
   RetinaImagePath.prototype.is_external = function() {
-    return !!(this.path.match(/^https?\:/i) && !this.path.match('//' + document.domain) )
-  }
+    return !!(this.path.match(/^https?\:/i) && !this.path.match('//' + document.domain));
+  };
 
   RetinaImagePath.prototype.check_2x_variant = function(callback) {
     var http, that = this;
@@ -92,10 +92,10 @@
         } else {
           return callback(false);
         }
-      }
+      };
       http.send();
     }
-  }
+  };
 
 
 
