@@ -20,6 +20,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "bundler", ">= 1.0.0"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec", ">= 2.3"
+  gem.add_development_dependency "rspec-rails", "~> 2.0"
   gem.add_development_dependency 'carrierwave'
   gem.add_development_dependency 'paperclip'
   gem.add_development_dependency "sqlite3"

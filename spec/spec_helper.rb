@@ -1,18 +1,32 @@
+require 'rubygems'
 require 'active_support'
 require 'active_record'
 
+## Carrierwave
+
 require 'carrierwave'
 
+## Paperclip
 
 require 'paperclip'
 require "paperclip/railtie"
 Paperclip::Railtie.insert
 
-require 'retina_rails'
+## Setup fixture database for activerecord
 
 ActiveRecord::Base.establish_connection(
   :adapter => "sqlite3",
   :database => File.dirname(__FILE__) + "/fixtures/db/retina_rails.sqlite3"
 )
 
-load File.dirname(__FILE__) + '/support/schema.rb'
+## Load support files
+
+Dir["spec/support/**/*.rb"].each { |f| load f }
+
+## Load rspec rails after initializing rails app
+
+require 'rspec/rails'
+
+## Load retina_rails
+
+require 'retina_rails'
