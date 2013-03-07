@@ -1,0 +1,10 @@
+---
+image.png: image-e8de7f87c2b9d08490575267a4c9eddc.png
+image/index.png: image-e8de7f87c2b9d08490575267a4c9eddc.png
+image@2x.png: image@2x-0842b16379ded9ddcc299912621f76bc.png
+image@2x/index.png: image@2x-0842b16379ded9ddcc299912621f76bc.png
+
+image.some.png: image.some-e8de7f87c2b9d08490575267a4c9eddc.png
+image.some/index.png: image.some-e8de7f87c2b9d08490575267a4c9eddc.png
+image.some@2x.png: image.some@2x-0842b16379ded9ddcc299912621f76bc.png
+image.some@2x/index.png: image.some@2x-0842b16379ded9ddcc299912621f76bc.png
