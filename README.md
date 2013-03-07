@@ -52,7 +52,7 @@ class ExampleUploader < ActiveRecord::Base
 end
 ```
 
-For assets with digest
+For retina images use
 ------------
 
 ```ruby
