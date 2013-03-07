@@ -1,4 +1,10 @@
-require 'rubygems'
+## Test coverage
+
+require 'coveralls'
+Coveralls.wear!
+
+## Rails
+
 require 'active_support'
 require 'active_record'
 
