@@ -7,7 +7,7 @@ How it works
 
 Retina Rails automatically generates retina versions of your uploaded images (CarrierWave or Paperclip). It detects if a visitor has a retina display and if so it displays the @2x version.
 
-Note: It also works for images that live in assets/images
+Note: It also works for images that live in assets/images.
 
 Installation
 ------------
@@ -50,6 +50,13 @@ class ExampleUploader < ActiveRecord::Base
   include RetinaRails::Paperclip
 
 end
+```
+
+For retina images use
+------------
+
+```ruby
+= image_tag('/assets/image.png', :retina => true)
 ```
 
 Voila! Now you're using Retina Rails.
