@@ -8,6 +8,21 @@ class AnonymousUploader < CarrierWave::Uploader::Base
     process :resize_to_fill => [30, 30]
   end
 
+  version :small_without_dimension_processor do
+    process :desaturate
+  end
+
+  version :small_multiple_processors do
+    process :resize_to_fill => [30, 30]
+    process :desaturate
+  end
+
+  def desaturate
+    manipulate! do |img|
+      img = img.quantize 256, Magick::GRAYColorspace
+    end
+  end
+
   version :small_without_processor
 
   include RetinaRails::CarrierWave
@@ -46,7 +61,7 @@ describe RetinaRails::CarrierWave do
     @uploader.remove!
   end
 
-  context 'with processor' do
+  context 'with dimensions processor' do
 
     its(:versions) { should include :small_retina }
 
@@ -57,6 +72,28 @@ describe RetinaRails::CarrierWave do
 
     it { File.basename(@uploader.small_retina.current_path, 'jpeg').should include '@2x'}
     it { File.basename(@uploader.small_retina.current_path, 'jpeg').should_not include 'retina_'}
+
+  end
+
+  context 'without dimensions processor' do
+
+    its(:versions) { should_not include :small_without_dimension_processor_retina }
+
+  end
+
+  context 'with multiple processors' do
+
+    its(:versions) { should include :small_multiple_processors_retina }
+
+    it { subject.versions[:small_multiple_processors][:uploader].processors.should include([:desaturate, [], nil]) }
+
+    it { @uploader.small_multiple_processors.should have_dimensions(30, 30) }
+    it { @uploader.small_multiple_processors_retina.should have_dimensions(60, 60) }
+
+    it { File.basename(@uploader.small_multiple_processors.current_path, 'jpeg').should include 'small_'}
+
+    it { File.basename(@uploader.small_multiple_processors_retina.current_path, 'jpeg').should include '@2x'}
+    it { File.basename(@uploader.small_multiple_processors_retina.current_path, 'jpeg').should_not include 'retina_'}
 
   end
 

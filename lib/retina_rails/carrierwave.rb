@@ -9,17 +9,18 @@ module RetinaRails
       ## Define retina version based on defined versions in the uploader class
       versions.each do |v|
 
-        processor = nil
+        processors = v[1][:uploader].processors.dup
+        dimensions_processor = nil
 
         ## Check if there's a resize processor to get the dimensions
-        v[1][:uploader].processors.each do |p|
-          processor = p if p[0].to_s.scan(/resize_to_fill|resize_to_limit|resize_to_fit|resize_and_pad/).any?
+        processors.each do |p|
+          dimensions_processor = processors.delete(p) if p[0].to_s.scan(/resize_to_fill|resize_to_limit|resize_to_fit|resize_and_pad/).any?
         end
 
         ## Define a retina version if processor is present
-        if processor
+        if dimensions_processor
 
-          options = processor[1].dup
+          options = dimensions_processor[1].dup
 
           width  = options[0] * 2
           height = options[1] * 2
@@ -30,7 +31,12 @@ module RetinaRails
           options.insert(0, width)
 
           version "#{v[0]}_retina" do
-            process processor[0] => options
+            process dimensions_processor[0] => options
+
+            ## Set other processors
+            processors.each do |processor|
+              process processor[0] => processor[1]
+            end
           end
 
         end
