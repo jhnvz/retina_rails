@@ -8,7 +8,7 @@ class AnonymousUploader < CarrierWave::Uploader::Base
     process :resize_to_fill => [30, 30]
   end
 
-  version :small_without_dimension_processor do
+  version :small_without_dimensions do
     process :desaturate
   end
 
@@ -77,7 +77,7 @@ describe RetinaRails::CarrierWave do
 
   context 'without dimensions processor' do
 
-    its(:versions) { should_not include :small_without_dimension_processor_retina }
+    its(:versions) { should_not include :small_without_dimensions_retina }
 
   end
 
