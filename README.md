@@ -49,12 +49,14 @@ class ExampleUploader < ActiveRecord::Base
     :styles => {
        :original => ["800x800", :jpg],
        :big => ["125x125#", :jpg]
-     }
+     },
+     :retina_quality => 25
 
   include RetinaRails::Paperclip
 
 end
 ```
+By default it sets the retina image quality to 40 which can be overriden by adding a `retina_quality` option
 
 For retina images use
 ------------
