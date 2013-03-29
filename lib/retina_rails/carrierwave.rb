@@ -40,6 +40,7 @@ module RetinaRails
           end
 
         end
+
       end
 
     end
@@ -48,6 +49,17 @@ module RetinaRails
     def full_filename(for_file)
       super.tap do |file_name|
         file_name.gsub!('.', '@2x.').gsub!('retina_', '') if version_name.to_s.include?('retina')
+      end
+    end
+
+    ## Set retina image quality
+    def retina_quality(percentage)
+      if version_name.to_s.include?('retina')
+        manipulate! do |img|
+          img.write(current_path) { self.quality = percentage } unless img.quality == percentage
+          img = yield(img) if block_given?
+          img
+        end
       end
     end
 
