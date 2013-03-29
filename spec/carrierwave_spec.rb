@@ -6,6 +6,7 @@ class AnonymousUploader < CarrierWave::Uploader::Base
 
   version :small do
     process :resize_to_fill => [30, 30]
+    process :quality => 60
     process :retina_quality => 20
   end
 
@@ -25,6 +26,14 @@ class AnonymousUploader < CarrierWave::Uploader::Base
   def desaturate
     manipulate! do |img|
       img = img.quantize 256, Magick::GRAYColorspace
+    end
+  end
+
+  def quality(percentage)
+    manipulate! do |img|
+      img.write(current_path) { self.quality = percentage } unless img.quality == percentage
+      img = yield(img) if block_given?
+      img
     end
   end
 
@@ -82,7 +91,7 @@ describe RetinaRails::CarrierWave do
 
   context 'with quality processor' do
 
-    it { Magick::Image.read(@uploader.small.current_path).first.quality.should == 84 }
+    it { Magick::Image.read(@uploader.small.current_path).first.quality.should == 60 }
 
     it { Magick::Image.read(@uploader.small_retina.current_path).first.quality.should == 20 }
 
