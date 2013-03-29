@@ -60,7 +60,7 @@ For retina images use
 ------------
 
 ```ruby
-= image_tag('/assets/image.png', :retina => true)
+image_tag('image.png', :retina => true)
 ```
 
 Voila! Now you're using Retina Rails.
