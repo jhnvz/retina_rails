@@ -92,7 +92,7 @@ describe RetinaRails::CarrierWave do
 
     it { Magick::Image.read(@uploader.small_without_quality.current_path).first.quality.should == 84 }
 
-    it { Magick::Image.read(@uploader.small_without_quality_retina.current_path).first.quality.should == 84 }
+    it { Magick::Image.read(@uploader.small_without_quality_retina.current_path).first.quality.should == 40 }
 
   end
 
