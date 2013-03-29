@@ -9,6 +9,15 @@ class PaperclipUpload < ActiveRecord::Base
        :original => ["800x800", :jpg],
        :big => ["125x125#", :jpg]
      },
+     :retina_quality => 60,
+     :path => "#{ROOT}/:class/:id/:basename_:style.:extension",
+     :url => "#{ROOT}/:class/:id/:basename_:style.:extension"
+
+  has_attached_file :avatar_without_quality,
+    :styles => {
+       :original => ["800x800", :jpg],
+       :big => ["125x125#", :jpg]
+     },
      :path => "#{ROOT}/:class/:id/:basename_:style.:extension",
      :url => "#{ROOT}/:class/:id/:basename_:style.:extension"
 
@@ -39,6 +48,24 @@ describe RetinaRails::Paperclip do
 
     it { Paperclip::Geometry.from_file(subject.avatar.url(:big)).to_s.should == '125x125' }
     it { Paperclip::Geometry.from_file(subject.avatar.url(:big_retina)).to_s.should == '250x250' }
+
+  end
+
+  context 'with retina quality' do
+
+    subject { PaperclipUpload.create(:avatar => File.open("#{ROOT}/fixtures/images/avatar.jpeg")) }
+
+    it { Magick::Image.read(subject.avatar.url(:big)).first.quality.should == 84 }
+    it { Magick::Image.read(subject.avatar.url(:big_retina)).first.quality.should == 60 }
+
+  end
+
+  context 'without retina quality' do
+
+    subject { PaperclipUpload.create(:avatar_without_quality => File.open("#{ROOT}/fixtures/images/avatar.jpeg")) }
+
+    it { Magick::Image.read(subject.avatar_without_quality.url(:big)).first.quality.should == 84 }
+    it { Magick::Image.read(subject.avatar_without_quality.url(:big_retina)).first.quality.should == 40 }
 
   end
 

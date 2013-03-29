@@ -44,7 +44,6 @@ module RetinaRails
 
             ## Set default quality if retina_quality is not defined
             process :retina_quality => 40 if quality_processor.nil?
-
           end
 
         end
