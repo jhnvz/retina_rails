@@ -2,10 +2,17 @@ module RetinaRails
 
   module Paperclip
 
+    MISCONFIGURATION_ERROR = <<eos
+You must specify the file format of all Paperclip attached images like so:
+:styles => {
+  :original => ["800x800", :jpg],
+  :big => ["125x125#", :jpg]
+}
+eos
+
     extend ActiveSupport::Concern
 
     included do
-
       ## Override paperclip default options
       RetinaRails::Extensions.override_default_options
 
@@ -21,6 +28,8 @@ module RetinaRails
 
           ## Iterate over styles and set optimzed dimensions
           styles.each_pair do |key, value|
+            # make sure the file format is configureed; otherwise we'll get strange errors
+            raise MISCONFIGURATION_ERROR unless value.is_a?(Array) && value.size == 2
 
             dimensions = value[0]
 

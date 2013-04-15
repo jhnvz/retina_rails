@@ -38,6 +38,24 @@ describe RetinaRails::Paperclip do
     it { Paperclip::Geometry.from_file(subject.avatar.url(:big)).to_s.should == '125x125' }
     it { Paperclip::Geometry.from_file(subject.avatar.url(:big_retina)).to_s.should == '250x250' }
 
+    it "should raise an understandable exception when attachments are misconfigured" do
+      expect do
+        class PaperclipUploadMisconfigured < ActiveRecord::Base
+
+          has_attached_file :avatar,
+            :styles => {
+               :original => "800x800",
+               :big => "125x125#"
+             },
+             :path => "#{ROOT}/:class/:id/:basename_:style.:extension",
+             :url => "#{ROOT}/:class/:id/:basename_:style.:extension"
+
+          include RetinaRails::Paperclip
+
+        end
+      end.to raise_error(RetinaRails::Paperclip::MISCONFIGURATION_ERROR)
+    end
+
   end
 
 end
