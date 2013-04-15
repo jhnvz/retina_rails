@@ -13,6 +13,7 @@ eos
     extend ActiveSupport::Concern
 
     included do
+
       ## Override paperclip default options
       RetinaRails::Extensions.override_default_options
 
