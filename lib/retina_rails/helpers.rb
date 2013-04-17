@@ -10,7 +10,8 @@ module ActionView
           filename      = retina_source.slice!(-2)
           retina_source = retina_source.insert(-2, "#{filename}@2x").join('.')
 
-          options.merge!(:data => { :at2x => path_to_image(retina_source) })
+          options[:data] ||= {}
+          options[:data].merge!(:at2x => path_to_image(retina_source))
         end
 
         image_tag_without_retina(source, options)
