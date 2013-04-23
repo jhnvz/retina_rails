@@ -53,7 +53,7 @@ describe RetinaRails::Paperclip do
           include RetinaRails::Paperclip
 
         end
-      end.to raise_error(RetinaRails::Paperclip::MISCONFIGURATION_ERROR)
+      end.to raise_error(RetinaRails::MisconfiguredError)
     end
 
   end

@@ -36,3 +36,4 @@ require 'rspec/rails'
 ## Load retina_rails
 
 require 'retina_rails'
+require 'retina_rails/exception'
