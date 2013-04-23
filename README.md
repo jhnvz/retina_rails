@@ -54,6 +54,8 @@ class ExampleUploader < ActiveRecord::Base
 end
 ```
 
+Make sure that you include the file format for all styles like so  ```ruby :original => ["800x800", :jpg]```. Omitting it will result in a MisconfiguredError being raised.
+
 For retina images use
 ------------
 

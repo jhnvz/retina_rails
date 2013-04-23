@@ -1,3 +1,5 @@
+require 'retina_rails/exception'
+
 module RetinaRails
 
   module Paperclip
