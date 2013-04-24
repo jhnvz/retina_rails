@@ -1,3 +1,5 @@
+require 'retina_rails/exception'
+
 module RetinaRails
 
   module Paperclip
@@ -21,6 +23,8 @@ module RetinaRails
 
           ## Iterate over styles and set optimzed dimensions
           styles.each_pair do |key, value|
+            # make sure the file format is configureed; otherwise we'll get strange errors
+            raise MisconfiguredError unless value.is_a?(Array) && value.size == 2
 
             dimensions = value[0]
 
