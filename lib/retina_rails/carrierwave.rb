@@ -63,7 +63,11 @@ module RetinaRails
     def retina_quality(percentage)
       if version_name.to_s.include?('retina')
         manipulate! do |img|
-          img.write(current_path) { self.quality = percentage } unless img.quality == percentage
+          if defined?(Magick)
+            img.write(current_path) { self.quality = percentage } unless img.quality == percentage
+          elsif defined?(MiniMagick)
+            img.quality(percentage.to_s)
+          end
           img = yield(img) if block_given?
           img
         end
