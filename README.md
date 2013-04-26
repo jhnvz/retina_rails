@@ -28,12 +28,14 @@ class ExampleUploader < CarrierWave::Uploader::Base
 
   version :small do
     process :resize_to_fill => [30, 30]
+    process :retina_quality => 25
   end
 
   include RetinaRails::CarrierWave
 
 end
 ```
+By default it sets the retina image quality to 40 which can be overriden with `process :retina_quality => 25`
 
 Paperclip
 ------------
@@ -47,12 +49,14 @@ class ExampleUploader < ActiveRecord::Base
     :styles => {
        :original => ["800x800", :jpg],
        :big => ["125x125#", :jpg]
-     }
+     },
+     :retina_quality => 25
 
   include RetinaRails::Paperclip
 
 end
 ```
+By default it sets the retina image quality to 40 which can be overriden by adding a `retina_quality` option
 
 For retina images use
 ------------
