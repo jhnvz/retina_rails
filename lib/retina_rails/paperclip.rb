@@ -15,9 +15,14 @@ module RetinaRails
         ## Check for style definitions
         styles = attachment_definitions[key][:styles]
 
+        ## Get retina quality
+        retina_quality = attachment_definitions[key][:retina_quality] || 40
+
         if styles
 
           retina_styles = {}
+          retina_convert_options = {}
+          convert_options = attachment_definitions[key][:convert_options]
 
           ## Iterate over styles and set optimzed dimensions
           styles.each_pair do |key, value|
@@ -31,10 +36,19 @@ module RetinaRails
 
             retina_styles["#{key}_retina".to_sym] = ["#{width}x#{height}#{processor}", value[1]]
 
+            ## Set quality convert option
+            convert_option = convert_options[key] if convert_options
+            convert_option = convert_option ? "#{convert_option} -quality #{retina_quality}" : "-quality #{retina_quality}"
+            retina_convert_options["#{key}_retina".to_sym] = convert_option
+
           end
 
           ## Append new retina optimzed styles
           value[:styles].merge!(retina_styles)
+
+          ## Set quality convert options
+          value[:convert_options] = {} if value[:convert_options].nil?
+          value[:convert_options].merge!(retina_convert_options)
 
           ## Make path work with retina optimization
           original_path = attachment_definitions[key][:path]

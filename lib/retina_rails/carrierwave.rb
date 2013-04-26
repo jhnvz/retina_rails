@@ -33,13 +33,21 @@ module RetinaRails
           version "#{v[0]}_retina" do
             process dimensions_processor[0] => options
 
+            quality_processor = nil
+
             ## Set other processors
             processors.each do |processor|
               process processor[0] => processor[1]
+
+              quality_processor = true if processor[0] == :retina_quality
             end
+
+            ## Set default quality if retina_quality is not defined
+            process :retina_quality => 40 if quality_processor.nil?
           end
 
         end
+
       end
 
     end
@@ -48,6 +56,17 @@ module RetinaRails
     def full_filename(for_file)
       super.tap do |file_name|
         file_name.gsub!('.', '@2x.').gsub!('retina_', '') if version_name.to_s.include?('retina')
+      end
+    end
+
+    ## Set retina image quality
+    def retina_quality(percentage)
+      if version_name.to_s.include?('retina')
+        manipulate! do |img|
+          img.write(current_path) { self.quality = percentage } unless img.quality == percentage
+          img = yield(img) if block_given?
+          img
+        end
       end
     end
 
