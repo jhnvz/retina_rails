@@ -2,7 +2,7 @@ module RetinaRails::Extensions
 
   ## Insert :retina interpolation in url or path
   def self.optimize_path(path)
-    path.scan(':retina').empty? ? path.gsub(':filename', ':basename.:extensions').split('.').insert(-2, ':retina.').join : path
+    path.scan(':retina').empty? ? path.gsub(':filename', ':basename.:extension').split('.').insert(-2, ':retina.').join : path
   end
 
   def self.override_default_options

@@ -4,9 +4,9 @@ describe RetinaRails::Extensions do
 
     subject { RetinaRails::Extensions }
 
-    it { subject.optimize_path('/:filename').should == '/:basename:retina.:extensions' }
+    it { subject.optimize_path('/:filename').should == '/:basename:retina.:extension' }
 
-    it { subject.optimize_path('/:basename.:extensions').should == '/:basename:retina.:extensions' }
+    it { subject.optimize_path('/:basename.:extension').should == '/:basename:retina.:extension' }
 
   end
 
@@ -16,7 +16,7 @@ describe RetinaRails::Extensions do
 
       before { RetinaRails::Extensions.override_default_options }
 
-      it { Paperclip::Attachment.default_options[:url].should == '/system/:class/:attachment/:id_partition/:style/:basename:retina.:extensions' }
+      it { Paperclip::Attachment.default_options[:url].should == '/system/:class/:attachment/:id_partition/:style/:basename:retina.:extension' }
 
     end
 
@@ -24,12 +24,12 @@ describe RetinaRails::Extensions do
 
       before do
 
-        Paperclip::Attachment.default_options[:url] = '/:class/:attachment/:id/:style/:basename.:extensions'
+        Paperclip::Attachment.default_options[:url] = '/:class/:attachment/:id/:style/:basename.:extension'
         RetinaRails::Extensions.override_default_options
 
       end
 
-      it { Paperclip::Attachment.default_options[:url].should == '/:class/:attachment/:id/:style/:basename:retina.:extensions' }
+      it { Paperclip::Attachment.default_options[:url].should == '/:class/:attachment/:id/:style/:basename:retina.:extension' }
 
     end
 
