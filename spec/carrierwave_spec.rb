@@ -134,4 +134,17 @@ describe RetinaRails::CarrierWave do
 
   end
 
+  context 'file with multiple dots' do
+
+    before do
+      AnonymousUploader.enable_processing = true
+      @uploader = AnonymousUploader.new(CarrierWaveUpload.new, :avatar)
+      @uploader.store!(File.open("#{File.dirname(__FILE__)}/fixtures/images/avatar.with.dots.jpeg"))
+    end
+
+    it { File.basename(@uploader.small.current_path, 'jpeg').should == 'small_avatar.with.dots.' }
+    it { File.basename(@uploader.small_retina.current_path, 'jpeg').should == 'small_avatar.with.dots@2x.' }
+
+  end
+
 end
