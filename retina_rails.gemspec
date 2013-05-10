@@ -6,8 +6,8 @@ require 'retina_rails/version'
 Gem::Specification.new do |gem|
   gem.name          = 'retina_rails'
   gem.version       = RetinaRails::VERSION
-  gem.authors       = ['Johan van Zonneveld']
-  gem.email         = ['johan@vzonneveld.nl']
+  gem.authors       = ['Johan van Zonneveld', 'Arjen Oosterkamp']
+  gem.email         = ['johan@vzonneveld.nl', 'mail@arjen.me']
   gem.homepage      = 'https://github.com/jhnvz/retina_rails.git'
   gem.summary       = %q{Makes your live easier optimizing for retina displays}
   gem.description   = %q{Retina Rails automatically generates retina versions of your uploaded images (CarrierWave or Paperclip). It detects if a visitor has a retina display and if so it displays the @2x version}
