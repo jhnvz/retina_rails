@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'rmagick'
 
 ROOT = File.dirname(__FILE__)
 
