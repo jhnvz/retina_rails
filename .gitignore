@@ -14,6 +14,8 @@ pkg
 rdoc
 spec/reports
 spec/paperclip_uploads
+spec/retina_rails/strategies/paperclip_uploads
+spec/fixtures/db/retina_rails.sqlite3
 test/tmp
 test/version_tmp
 tmp

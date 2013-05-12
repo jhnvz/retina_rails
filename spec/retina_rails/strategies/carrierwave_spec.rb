@@ -39,8 +39,6 @@ class AnonymousUploader < CarrierWave::Uploader::Base
 
   version :small_without_processor
 
-  include RetinaRails::CarrierWave
-
 end
 
 class CarrierWaveUpload
@@ -58,7 +56,7 @@ class CarrierWaveUpload
 
 end
 
-describe RetinaRails::CarrierWave do
+describe RetinaRails::Strategies::CarrierWave do
 
   include CarrierWave::Test::Matchers
 
@@ -67,7 +65,7 @@ describe RetinaRails::CarrierWave do
   before do
     AnonymousUploader.enable_processing = true
     @uploader = AnonymousUploader.new(CarrierWaveUpload.new, :avatar)
-    @uploader.store!(File.open("#{File.dirname(__FILE__)}/fixtures/images/avatar.jpeg"))
+    @uploader.store!(File.open("#{fixture_path}/images/avatar.jpeg"))
   end
 
   after do
@@ -139,7 +137,7 @@ describe RetinaRails::CarrierWave do
     before do
       AnonymousUploader.enable_processing = true
       @uploader = AnonymousUploader.new(CarrierWaveUpload.new, :avatar)
-      @uploader.store!(File.open("#{File.dirname(__FILE__)}/fixtures/images/avatar.with.dots.jpeg"))
+      @uploader.store!(File.open("#{fixture_path}/images/avatar.with.dots.jpeg"))
     end
 
     it { File.basename(@uploader.small.current_path, 'jpeg').should == 'small_avatar.with.dots.' }
