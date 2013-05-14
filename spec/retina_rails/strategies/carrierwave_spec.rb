@@ -4,6 +4,8 @@ class AnonymousUploader < CarrierWave::Uploader::Base
 
   include CarrierWave::RMagick
 
+  retina!
+
   version :small do
     process :resize_to_fill => [30, 30]
     process :quality => 60

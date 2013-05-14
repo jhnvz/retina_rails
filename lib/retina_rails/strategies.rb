@@ -6,7 +6,7 @@ module RetinaRails
 
     def self.include_strategies
       if defined?(CarrierWave)
-        ::CarrierWave::Uploader::Base.send(:include, RetinaRails::Strategies::CarrierWave)
+        ::CarrierWave::Uploader::Base.send(:include, RetinaRails::Strategies::CarrierWave::Base)
       end
     end
 

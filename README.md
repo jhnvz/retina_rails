@@ -21,17 +21,17 @@ Installation
 CarrierWave
 ------------
 
-Add `include RetinaRails::CarrierWave` to the bottom of your uploader
+Simply add `retina!` to your uploader.
 
 ```ruby
 class ExampleUploader < CarrierWave::Uploader::Base
+
+  retina!
 
   version :small do
     process :resize_to_fill => [30, 30]
     process :retina_quality => 25
   end
-
-  include RetinaRails::CarrierWave
 
 end
 ```
