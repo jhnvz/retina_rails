@@ -33,9 +33,13 @@ class ExampleUploader < CarrierWave::Uploader::Base
     process :retina_quality => 25
   end
 
+  version :large, :retina => false do
+    process :resize_to_fill => [1000, 1000]
+  end
+
 end
 ```
-By default it sets the retina image quality to 40 which can be overriden with `process :retina_quality => 25`
+By default it sets the retina image quality to 40 which can be overriden with `process :retina_quality => 25`. To disable the creation of a retina version simply call `version :small, :retina => false`.
 
 Paperclip
 ------------

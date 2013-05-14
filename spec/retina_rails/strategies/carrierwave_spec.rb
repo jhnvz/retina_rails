@@ -25,6 +25,10 @@ class AnonymousUploader < CarrierWave::Uploader::Base
     process :desaturate
   end
 
+  version :small_without_retina, :retina => false do
+    process :quality => 60
+  end
+
   def desaturate
     manipulate! do |img|
       img = img.quantize 256, Magick::GRAYColorspace
@@ -144,6 +148,12 @@ describe RetinaRails::Strategies::CarrierWave do
 
     it { File.basename(@uploader.small.current_path, 'jpeg').should == 'small_avatar.with.dots.' }
     it { File.basename(@uploader.small_retina.current_path, 'jpeg').should == 'small_avatar.with.dots@2x.' }
+
+  end
+
+  context 'without retina' do
+
+    its(:versions) { should_not include :small_without_retina_retina }
 
   end
 
