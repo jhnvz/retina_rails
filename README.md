@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/retina_rails.png)](http://badge.fury.io/rb/retina_rails) [![Build Status](https://secure.travis-ci.org/jhnvz/retina_rails.png?branch=master)](http://travis-ci.org/jhnvz/retina_rails) [![Coverage Status](https://coveralls.io/repos/jhnvz/retina_rails/badge.png?branch=master)](https://coveralls.io/r/jhnvz/retina_rails) [![Code Climate](https://codeclimate.com/github/jhnvz/retina_rails.png)](https://codeclimate.com/github/jhnvz/retina_rails) [![Dependency Status](https://gemnasium.com/jhnvz/retina_rails.png)](https://gemnasium.com/jhnvz/retina_rails)
 
-Makes your live easier optimizing an application for retina displays.
+Makes your life easier optimizing an application for retina displays.
 
 How it works
 ------------
@@ -44,23 +44,24 @@ By default it sets the retina image quality to 40 which can be overriden with `p
 Paperclip
 ------------
 
-Add `include RetinaRails::Paperclip` to the bottom of your class
+Simply add `retina!` to your model and set `:retina` to true.
 
 ```ruby
 class ExampleUploader < ActiveRecord::Base
+
+  retina!
 
   has_attached_file :image,
     :styles => {
        :original => ["800x800", :jpg],
        :big => ["125x125#", :jpg]
      },
-     :retina_quality => 25
-
-  include RetinaRails::Paperclip
+     :retina => true
+     # :retina => { :quality => 25 }
 
 end
 ```
-By default it sets the retina image quality to 40 which can be overriden by adding a `retina_quality` option
+By default it sets the retina image quality to 40 which can be overriden by adding a `quality` option.
 
 For retina images use
 ------------

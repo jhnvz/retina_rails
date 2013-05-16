@@ -4,12 +4,14 @@ ROOT = File.dirname(__FILE__)
 
 class PaperclipUpload < ActiveRecord::Base
 
+  retina!
+
   has_attached_file :avatar,
     :styles => {
        :original => ["800x800", :jpg],
        :big => ["125x125#", :jpg]
      },
-     :retina_quality => 60,
+     :retina => { :quality => 60 },
      :path => "#{ROOT}/:class/:id/:basename_:style.:extension",
      :url => "#{ROOT}/:class/:id/:basename_:style.:extension"
 
@@ -18,10 +20,9 @@ class PaperclipUpload < ActiveRecord::Base
        :original => ["800x800", :jpg],
        :big => ["125x125#", :jpg]
      },
+     :retina => true,
      :path => "#{ROOT}/:class/:id/:basename_:style.:extension",
      :url => "#{ROOT}/:class/:id/:basename_:style.:extension"
-
-  include RetinaRails::Strategies::Paperclip
 
 end
 
@@ -71,7 +72,7 @@ describe RetinaRails::Strategies::Paperclip do
 
   describe :optimze_path do
 
-    subject { RetinaRails::Strategies::Paperclip::Extensions }
+    subject { RetinaRails::Strategies::Paperclip::Uploader::Extensions }
 
     it { subject.optimize_path('/:filename').should == '/:basename:retina.:extension' }
 
@@ -83,7 +84,7 @@ describe RetinaRails::Strategies::Paperclip do
 
     context 'Paperclip default' do
 
-      before { RetinaRails::Strategies::Paperclip::Extensions.override_default_options }
+      before { RetinaRails::Strategies::Paperclip::Uploader::Extensions.override_default_options }
 
       it { Paperclip::Attachment.default_options[:url].should == '/system/:class/:attachment/:id_partition/:style/:basename:retina.:extension' }
 
@@ -94,7 +95,7 @@ describe RetinaRails::Strategies::Paperclip do
       before do
 
         Paperclip::Attachment.default_options[:url] = '/:class/:attachment/:id/:style/:basename.:extension'
-        RetinaRails::Strategies::Paperclip::Extensions.override_default_options
+        RetinaRails::Strategies::Paperclip::Uploader::Extensions.override_default_options
 
       end
 
