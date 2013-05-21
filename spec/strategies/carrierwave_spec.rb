@@ -43,25 +43,7 @@ class AnonymousUploader < CarrierWave::Uploader::Base
     end
   end
 
-  def resize_to_fill_with_gravity(width, height, gravity, format, quality)
-    manipulate! do |img|
-      cols, rows = img[:dimensions]
-      img.format do |i|
-        if width != cols || height != rows
-          scale      = [width/cols.to_f, height/rows.to_f].max
-          cols, rows = (scale * (cols + 0.5)).round, (scale * (rows + 0.5)).round
-          i.resize "#{cols}x#{rows}"
-        end
-        i.gravity gravity
-        i.background "rgba(255,255,255,0.0)"
-        i.extent "#{width}x#{height}" if cols != width || rows != height
-        i.quality quality.to_s
-      end
-      img = yield(img) if block_given?
-      img
-    end
-    file.content_type = 'image/jpeg' if format.to_s =~ /jpe?g/ # must set explicitly
-  end
+  def resize_to_fill_with_gravity(width, height, gravity, format, quality); end
 
   def quality(percentage)
     manipulate! do |img|
