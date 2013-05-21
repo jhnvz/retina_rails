@@ -41,6 +41,29 @@ end
 ```
 By default it sets the retina image quality to 40 which can be overriden with `process :retina_quality => 25`. To disable the creation of a retina version simply call `version :small, :retina => false`.
 
+### Custom processors
+
+You can also use your custom processors like so:
+
+```ruby
+class ExampleUploader < CarrierWave::Uploader::Base
+
+  retina!
+
+  version :small, :retina => false do
+    process :resize_to_fill_with_gravity => [100, 100, 'North', :jpg, 75]
+  end
+
+  version :small_retina, :retina => false do
+    process :resize_to_fill_with_gravity => [200, 200, 'North', :jpg, 40]
+  end
+
+end
+```
+
+This will generate `small.jpg` and `small@2x.jpg`.
+
+
 Paperclip
 ------------
 
