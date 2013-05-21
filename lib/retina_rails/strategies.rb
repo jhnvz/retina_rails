@@ -15,5 +15,3 @@ module RetinaRails
 
   end
 end
-
-RetinaRails::Strategies.include_strategies
