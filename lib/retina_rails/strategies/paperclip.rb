@@ -127,3 +127,12 @@ module RetinaRails
     end
   end
 end
+
+module Paperclip
+  module Glue
+    def self.included(base)
+      super
+      base.send :include, RetinaRails::Strategies::Paperclip::Uploader
+    end
+  end
+end
