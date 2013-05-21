@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/retina_rails.png)](http://badge.fury.io/rb/retina_rails) [![Build Status](https://secure.travis-ci.org/jhnvz/retina_rails.png?branch=master)](http://travis-ci.org/jhnvz/retina_rails) [![Coverage Status](https://coveralls.io/repos/jhnvz/retina_rails/badge.png?branch=master)](https://coveralls.io/r/jhnvz/retina_rails) [![Code Climate](https://codeclimate.com/github/jhnvz/retina_rails.png)](https://codeclimate.com/github/jhnvz/retina_rails) [![Dependency Status](https://gemnasium.com/jhnvz/retina_rails.png)](https://gemnasium.com/jhnvz/retina_rails)
 
-Makes your live easier optimizing an application for retina displays.
+Makes your life easier optimizing an application for retina displays.
 
 How it works
 ------------
@@ -21,42 +21,70 @@ Installation
 CarrierWave
 ------------
 
-Add `include RetinaRails::CarrierWave` to the bottom of your uploader
+Simply add `retina!` to your uploader.
 
 ```ruby
 class ExampleUploader < CarrierWave::Uploader::Base
+
+  retina!
 
   version :small do
     process :resize_to_fill => [30, 30]
     process :retina_quality => 25
   end
 
-  include RetinaRails::CarrierWave
+  version :large, :retina => false do
+    process :resize_to_fill => [1000, 1000]
+  end
 
 end
 ```
-By default it sets the retina image quality to 40 which can be overriden with `process :retina_quality => 25`
+By default it sets the retina image quality to 40 which can be overriden with `process :retina_quality => 25`. To disable the creation of a retina version simply call `version :small, :retina => false`.
+
+### Custom processors
+
+You can also use your custom processors like so:
+
+```ruby
+class ExampleUploader < CarrierWave::Uploader::Base
+
+  retina!
+
+  version :small, :retina => false do
+    process :resize_to_fill_with_gravity => [100, 100, 'North', :jpg, 75]
+  end
+
+  version :small_retina, :retina => false do
+    process :resize_to_fill_with_gravity => [200, 200, 'North', :jpg, 40]
+  end
+
+end
+```
+
+This will generate `small.jpg` and `small@2x.jpg`.
+
 
 Paperclip
 ------------
 
-Add `include RetinaRails::Paperclip` to the bottom of your class
+Simply add `retina!` to your model and set `:retina` to true.
 
 ```ruby
 class ExampleUploader < ActiveRecord::Base
+
+  retina!
 
   has_attached_file :image,
     :styles => {
        :original => ["800x800", :jpg],
        :big => ["125x125#", :jpg]
      },
-     :retina_quality => 25
-
-  include RetinaRails::Paperclip
+     :retina => true
+     # :retina => { :quality => 25 }
 
 end
 ```
-By default it sets the retina image quality to 40 which can be overriden by adding a `retina_quality` option
+By default it sets the retina image quality to 40 which can be overriden by adding a `quality` option.
 
 For retina images use
 ------------
