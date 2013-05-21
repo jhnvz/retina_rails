@@ -72,6 +72,8 @@ Simply add `retina!` to your model and set `:retina` to true.
 ```ruby
 class ExampleUploader < ActiveRecord::Base
 
+  retina!
+
   has_attached_file :image,
     :styles => {
        :original => ["800x800", :jpg],
