@@ -29,10 +29,38 @@ class AnonymousUploader < CarrierWave::Uploader::Base
     process :quality => 60
   end
 
+  version :small_custom_processor, :retina => false do
+    process resize_to_fill_with_gravity: [100, 100, 'North', :jpg, 75]
+  end
+
+  version :small_custom_processor_retina, :retina => false do
+    process resize_to_fill_with_gravity: [200, 200, 'North', :jpg, 40]
+  end
+
   def desaturate
     manipulate! do |img|
       img = img.quantize 256, Magick::GRAYColorspace
     end
+  end
+
+  def resize_to_fill_with_gravity(width, height, gravity, format, quality)
+    manipulate! do |img|
+      cols, rows = img[:dimensions]
+      img.format do |i|
+        if width != cols || height != rows
+          scale      = [width/cols.to_f, height/rows.to_f].max
+          cols, rows = (scale * (cols + 0.5)).round, (scale * (rows + 0.5)).round
+          i.resize "#{cols}x#{rows}"
+        end
+        i.gravity gravity
+        i.background "rgba(255,255,255,0.0)"
+        i.extent "#{width}x#{height}" if cols != width || rows != height
+        i.quality quality.to_s
+      end
+      img = yield(img) if block_given?
+      img
+    end
+    file.content_type = 'image/jpeg' if format.to_s =~ /jpe?g/ # must set explicitly
   end
 
   def quality(percentage)
@@ -154,6 +182,17 @@ describe RetinaRails::Strategies::CarrierWave do
   context 'without retina' do
 
     its(:versions) { should_not include :small_without_retina_retina }
+
+  end
+
+  context 'custom processor' do
+
+    its(:versions) { should_not include :small_custom_processor_retina_retina }
+
+    it { File.basename(@uploader.small_custom_processor.current_path, 'jpeg').should include 'small_custom_processor_'}
+
+    it { File.basename(@uploader.small_custom_processor_retina.current_path, 'jpeg').should include '@2x'}
+    it { File.basename(@uploader.small_custom_processor_retina.current_path, 'jpeg').should_not include 'retina_'}
 
   end
 
