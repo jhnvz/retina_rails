@@ -30,11 +30,11 @@ class AnonymousUploader < CarrierWave::Uploader::Base
   end
 
   version :small_custom_processor, :retina => false do
-    process resize_to_fill_with_gravity: [100, 100, 'North', :jpg, 75]
+    process :resize_to_fill_with_gravity => [100, 100, 'North', :jpg, 75]
   end
 
   version :small_custom_processor_retina, :retina => false do
-    process resize_to_fill_with_gravity: [200, 200, 'North', :jpg, 40]
+    process :resize_to_fill_with_gravity => [200, 200, 'North', :jpg, 40]
   end
 
   def desaturate
