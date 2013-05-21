@@ -4,6 +4,8 @@ class AnonymousUploader < CarrierWave::Uploader::Base
 
   include CarrierWave::RMagick
 
+  retina!
+
   version :small do
     process :resize_to_fill => [30, 30]
     process :quality => 60
@@ -23,11 +25,25 @@ class AnonymousUploader < CarrierWave::Uploader::Base
     process :desaturate
   end
 
+  version :small_without_retina, :retina => false do
+    process :quality => 60
+  end
+
+  version :small_custom_processor, :retina => false do
+    process :resize_to_fill_with_gravity => [100, 100, 'North', :jpg, 75]
+  end
+
+  version :small_custom_processor_retina, :retina => false do
+    process :resize_to_fill_with_gravity => [200, 200, 'North', :jpg, 40]
+  end
+
   def desaturate
     manipulate! do |img|
       img = img.quantize 256, Magick::GRAYColorspace
     end
   end
+
+  def resize_to_fill_with_gravity(width, height, gravity, format, quality); end
 
   def quality(percentage)
     manipulate! do |img|
@@ -38,8 +54,6 @@ class AnonymousUploader < CarrierWave::Uploader::Base
   end
 
   version :small_without_processor
-
-  include RetinaRails::CarrierWave
 
 end
 
@@ -58,7 +72,7 @@ class CarrierWaveUpload
 
 end
 
-describe RetinaRails::CarrierWave do
+describe RetinaRails::Strategies::CarrierWave do
 
   include CarrierWave::Test::Matchers
 
@@ -67,7 +81,7 @@ describe RetinaRails::CarrierWave do
   before do
     AnonymousUploader.enable_processing = true
     @uploader = AnonymousUploader.new(CarrierWaveUpload.new, :avatar)
-    @uploader.store!(File.open("#{File.dirname(__FILE__)}/fixtures/images/avatar.jpeg"))
+    @uploader.store!(File.open("#{fixture_path}/images/avatar.jpeg"))
   end
 
   after do
@@ -139,11 +153,28 @@ describe RetinaRails::CarrierWave do
     before do
       AnonymousUploader.enable_processing = true
       @uploader = AnonymousUploader.new(CarrierWaveUpload.new, :avatar)
-      @uploader.store!(File.open("#{File.dirname(__FILE__)}/fixtures/images/avatar.with.dots.jpeg"))
+      @uploader.store!(File.open("#{fixture_path}/images/avatar.with.dots.jpeg"))
     end
 
     it { File.basename(@uploader.small.current_path, 'jpeg').should == 'small_avatar.with.dots.' }
     it { File.basename(@uploader.small_retina.current_path, 'jpeg').should == 'small_avatar.with.dots@2x.' }
+
+  end
+
+  context 'without retina' do
+
+    its(:versions) { should_not include :small_without_retina_retina }
+
+  end
+
+  context 'custom processor' do
+
+    its(:versions) { should_not include :small_custom_processor_retina_retina }
+
+    it { File.basename(@uploader.small_custom_processor.current_path, 'jpeg').should include 'small_custom_processor_'}
+
+    it { File.basename(@uploader.small_custom_processor_retina.current_path, 'jpeg').should include '@2x'}
+    it { File.basename(@uploader.small_custom_processor_retina.current_path, 'jpeg').should_not include 'retina_'}
 
   end
 

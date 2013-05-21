@@ -36,3 +36,7 @@ require 'rspec/rails'
 ## Load retina_rails
 
 require 'retina_rails'
+
+RSpec.configure do |config|
+  config.fixture_path = "#{File.dirname(__FILE__)}/fixtures"
+end
