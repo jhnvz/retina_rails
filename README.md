@@ -67,12 +67,10 @@ This will generate `small.jpg` and `small@2x.jpg`.
 Paperclip
 ------------
 
-Simply add `retina!` to your model and set `:retina` to true.
+Simply set `:retina` to true.
 
 ```ruby
 class ExampleUploader < ActiveRecord::Base
-
-  retina!
 
   has_attached_file :image,
     :styles => {
@@ -84,9 +82,7 @@ class ExampleUploader < ActiveRecord::Base
 
 end
 ```
-By default it sets the retina image quality to 40 which can be overriden by adding a `quality` option.
-
-To use without ActiveRecord simply include `Paperclip::Glue` and it will work.
+By default it sets the retina image quality to 40 which can be overriden by adding a `quality` option. To use without ActiveRecord simply include `Paperclip::Glue` and it will work.
 
 For retina images use
 ------------

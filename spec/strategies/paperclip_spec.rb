@@ -4,7 +4,7 @@ ROOT = File.dirname(__FILE__)
 
 class PaperclipUpload < ActiveRecord::Base
 
-  retina!
+  include Paperclip::Glue
 
   has_attached_file :avatar,
     :styles => {
