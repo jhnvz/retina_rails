@@ -37,6 +37,8 @@ require 'rspec/rails'
 
 require 'retina_rails'
 
+RetinaRails::Strategies.include_strategies
+
 RSpec.configure do |config|
   config.fixture_path = "#{File.dirname(__FILE__)}/fixtures"
 end

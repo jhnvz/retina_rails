@@ -10,6 +10,12 @@ module RetinaRails
 
   if defined?(Rails)
     class Engine < Rails::Engine; end
+
+    class Railtie < Rails::Railtie
+      initializer "retina_rails.include_strategies" do
+         RetinaRails::Strategies.include_strategies
+      end
+    end
   end
 
 end
