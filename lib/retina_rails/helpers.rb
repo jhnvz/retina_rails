@@ -6,7 +6,8 @@ module ActionView
         retina = options.delete(:retina)
 
         if retina
-          retina_source = source.split('.')
+          retina_source = source.to_s
+          retina_source = retina_source.split('.')
           filename      = retina_source.slice!(-2)
           retina_source = retina_source.insert(-2, "#{filename}@2x").join('.')
 
