@@ -24,6 +24,14 @@ class PaperclipUpload < ActiveRecord::Base
      :path => "#{ROOT}/:class/:id/:basename_:style.:extension",
      :url => "#{ROOT}/:class/:id/:basename_:style.:extension"
 
+  has_attached_file :avatar_string_styles,
+    :styles => {
+        :original => "800x800",
+        :big => "125x125#"
+    },
+    :retina => true,
+    :path => "#{ROOT}/:class/:id/:basename_:style.:extension",
+    :url => "#{ROOT}/:class/:id/:basename_:style.:extension"
 end
 
 describe RetinaRails::Strategies::Paperclip do
@@ -44,11 +52,23 @@ describe RetinaRails::Strategies::Paperclip do
 
     subject { PaperclipUpload.create(:avatar => File.open("#{fixture_path}/images/avatar.jpeg")) }
 
-    it { subject.avatar.url(:big).should == "#{ROOT}/paperclip_uploads/1/avatar_big.jpg" }
-    it { subject.avatar.url(:big_retina).should == "#{ROOT}/paperclip_uploads/2/avatar_big@2x.jpg" }
+    it { subject.avatar.url(:big).should == "#{ROOT}/paperclip_uploads/#{subject.id}/avatar_big.jpg" }
+    it { subject.avatar.url(:big_retina).should == "#{ROOT}/paperclip_uploads/#{subject.id}/avatar_big@2x.jpg" }
 
     it { Paperclip::Geometry.from_file(subject.avatar.url(:big)).to_s.should == '125x125' }
     it { Paperclip::Geometry.from_file(subject.avatar.url(:big_retina)).to_s.should == '250x250' }
+
+  end
+
+  context 'uploads with string styles' do
+
+    subject { PaperclipUpload.create(:avatar_string_styles => File.open("#{fixture_path}/images/avatar.jpeg")) }
+
+    it { subject.avatar_string_styles.url(:big).should == "#{ROOT}/paperclip_uploads/#{subject.id}/avatar_big.jpeg" }
+    it { subject.avatar_string_styles.url(:big_retina).should == "#{ROOT}/paperclip_uploads/#{subject.id}/avatar_big@2x.jpeg" }
+
+    it { Paperclip::Geometry.from_file(subject.avatar_string_styles.url(:big)).to_s.should == '125x125' }
+    it { Paperclip::Geometry.from_file(subject.avatar_string_styles.url(:big_retina)).to_s.should == '250x250' }
 
   end
 
