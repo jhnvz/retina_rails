@@ -59,14 +59,15 @@ module RetinaRails
               ## Iterate over styles and set optimzed dimensions
               styles.each_pair do |key, value|
 
-                dimensions = value[0]
+                dimensions = value.kind_of?(Array) ? value[0] : value
 
                 width  = dimensions.scan(/\d+/)[0].to_i * 2
                 height = dimensions.scan(/\d+/)[1].to_i * 2
 
                 processor = dimensions.scan(/#|</).first
 
-                retina_styles["#{key}_retina".to_sym] = ["#{width}x#{height}#{processor}", value[1]]
+                new_dimensions = "#{width}x#{height}#{processor}"
+                retina_styles["#{key}_retina".to_sym] = value.kind_of?(Array) ? [new_dimensions, value[1]] : new_dimensions
 
                 ## Set quality convert option
                 convert_option = convert_options[key] if convert_options
