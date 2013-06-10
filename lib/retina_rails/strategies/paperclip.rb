@@ -41,11 +41,13 @@ module RetinaRails
             ## Check for style definitions
             styles = attachment[:styles]
 
+
+
             retina_options = if attachment[:retina].is_a?(Hash)
-              attachment[:retina]
-            else
-              { :quality => 40 }
-            end
+                               attachment[:retina]
+                             else
+                               { :quality => 40 }
+                             end
 
             ## Get retina quality
             retina_quality = retina_options[:quality] || 40
@@ -59,7 +61,19 @@ module RetinaRails
               ## Iterate over styles and set optimzed dimensions
               styles.each_pair do |key, value|
 
+
+=begin
+              #for those who define paperclip styles as this:- 
+              has_mongoid_attached_file :attachment, :styles => {
+                :small        => {:geometry => "75x75>"},
+                :masonry_size => {:geometry => "220x145"},
+                :thumbnail_size => {:geometry => "240x240>", :processors => [:jcropper]}
+              }
+=end
+
                 dimensions = value[0]
+                
+                dimensions = value.values.first if dimensions.nil? #added to avoid further errors for those who define styles in model differently
 
                 width  = dimensions.scan(/\d+/)[0].to_i * 2
                 height = dimensions.scan(/\d+/)[1].to_i * 2
