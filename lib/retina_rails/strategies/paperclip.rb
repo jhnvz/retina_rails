@@ -29,6 +29,12 @@ module RetinaRails
 
         module ClassMethods
 
+          def has_mongoid_attached_file(name, options={})
+            super
+
+            has_attached_retina_file name if options[:retina]
+          end
+
           def has_attached_file(name, options={})
             super
 
@@ -61,10 +67,18 @@ module RetinaRails
 
                 dimensions = value.kind_of?(Array) ? value[0] : value
 
-                width  = dimensions.scan(/\d+/)[0].to_i * 2
-                height = dimensions.scan(/\d+/)[1].to_i * 2
+                if dimensions.class == Hash
+                  width  = dimensions[:geometry].scan(/\d+/)[0].to_i * 2
+                  height = dimensions[:geometry].scan(/\d+/)[1].to_i * 2
 
-                processor = dimensions.scan(/#|</).first
+                  processor = dimensions[:geometry].scan(/#|</).first
+                else
+                  width  = dimensions.scan(/\d+/)[0].to_i * 2
+                  height = dimensions.scan(/\d+/)[1].to_i * 2
+
+                  processor = dimensions.scan(/#|</).first
+                end
+
 
                 new_dimensions = "#{width}x#{height}#{processor}"
                 retina_styles["#{key}_retina".to_sym] = value.kind_of?(Array) ? [new_dimensions, value[1]] : new_dimensions
