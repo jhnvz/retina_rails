@@ -67,17 +67,12 @@ module RetinaRails
 
                 dimensions = value.kind_of?(Array) ? value[0] : value
 
-                if dimensions.class == Hash
-                  width  = dimensions[:geometry].scan(/\d+/)[0].to_i * 2
-                  height = dimensions[:geometry].scan(/\d+/)[1].to_i * 2
+                dimensions = dimensions[:geometry] if dimensions.class == Hash
+                
+                width  = dimensions.scan(/\d+/)[0].to_i * 2
+                height = dimensions.scan(/\d+/)[1].to_i * 2
 
-                  processor = dimensions[:geometry].scan(/#|</).first
-                else
-                  width  = dimensions.scan(/\d+/)[0].to_i * 2
-                  height = dimensions.scan(/\d+/)[1].to_i * 2
-
-                  processor = dimensions.scan(/#|</).first
-                end
+                processor = dimensions.scan(/#|</).first
 
 
                 new_dimensions = "#{width}x#{height}#{processor}"
