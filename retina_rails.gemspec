@@ -29,7 +29,7 @@ Gem::Specification.new do |gem|
 
 
   if RUBY_VERSION < "1.9.3"
-    gem.add_dependency 'rails', '~> 3.0.0'
+    gem.add_dependency 'rails', '>= 3.2.0', '< 4.0.0'
   else
     gem.add_dependency 'rails', '>= 3.0'
   end
