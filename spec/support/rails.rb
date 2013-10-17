@@ -6,7 +6,7 @@ module RetinaRailsTest
   class Application < Rails::Application
     config.active_support.deprecation = :log
 
-    config.assets.manifest = Rails.public_path.to_s.gsub('public', 'spec/fixtures')
+    config.assets.manifest = Rails.root.join("spec/fixtures")
 
     ## Asset config
 
