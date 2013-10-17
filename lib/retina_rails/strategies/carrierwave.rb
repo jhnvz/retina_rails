@@ -76,8 +76,15 @@ module RetinaRails
         ## Set the correct filename for storage according to the convention (append @2x to filename)
         def full_filename(for_file)
           super.tap do |file_name|
-            file_name.sub!(/(.*)\./, '\1@2x.').gsub!('retina_', '') if version_name.to_s.include?('retina')
-          end
+            if version_name.to_s.include?('retina')
+              if file_name.include?('.')
+                file_name.sub!(/(.*)\./, '\1@2x.')
+              else
+                file_name.sub!(/(.*)/, '\1@2x')
+              end
+              file_name.gsub!('retina_', '')
+            end
+          end          
         end
 
         ## Set retina image quality
