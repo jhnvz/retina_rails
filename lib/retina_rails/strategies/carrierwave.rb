@@ -76,7 +76,7 @@ module RetinaRails
         ## Set the correct filename for storage according to the convention (append @2x to filename)
         def full_filename(for_file)
           super.tap do |file_name|
-            file_name.sub!(/(.*)\./, '\1@2x.').gsub!('retina_', '') if version_name.to_s.include?('retina')
+            file_name.sub!(/(.*)\./, '\1@2x.').try(:gsub!, 'retina_', '') if version_name.to_s.include?('retina')
           end
         end
 
