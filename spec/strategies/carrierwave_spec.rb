@@ -202,7 +202,9 @@ describe RetinaRails::Strategies::CarrierWave do
     end
 
     it { File.basename(@uploader.small.current_path, 'jpeg').should include 'small_'}
+    it { File.basename(@uploader.small_retina.current_path, 'jpeg').should include '@2x'}
+    it { File.basename(@uploader.small_retina.current_path, 'jpeg').should_not include 'retina_'}
 
   end
-  
+
 end
