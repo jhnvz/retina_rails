@@ -80,7 +80,7 @@ class ExampleUploader < ActiveRecord::Base
        :big => ["125x125#", :jpg]
      },
      :retina => true
-     # :retina => { :quality => 25 }
+     :retina => { :quality => 25 }
 
 end
 ```
