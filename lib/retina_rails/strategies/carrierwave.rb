@@ -77,15 +77,15 @@ module RetinaRails
         def full_filename(for_file)
           super.tap do |file_name|
             if version_name.to_s.include?('retina')
-              has_extension = file.scan(/(jpg|jpeg|png|gif|bmp)/).any?
+              has_extension = file_name.scan(/(jpg|jpeg|png|gif|bmp)/).any?
 
               if has_extension
                 file_name.sub!(/(.*)\./, '\1@2x.')
               else
-                file.name.sub!(/.*/), '\1@2x.')
+                file_name.sub!(/.*/, '\1@2x.')
               end
 
-              filename.gsub!('retina_', '')
+              file_name.gsub!('retina_', '')
             end
           end
         end
