@@ -79,13 +79,8 @@ module RetinaRails
             if version_name.to_s.include?('retina')
               has_extension = file_name.scan(/(jpg|jpeg|png|gif|bmp)/).any?
 
-              if has_extension
-                file_name.sub!(/(.*)\./, '\1@2x.')
-              else
-                file_name.sub!(/.*/, '\1@2x.')
-              end
-
-              file_name.gsub!('retina_', '')
+              regex = has_extension ? /(.*)\./ : /.*/
+              file_name.sub!(regex, '\1@2x.').gsub!('retina_', '')
             end
           end
         end
