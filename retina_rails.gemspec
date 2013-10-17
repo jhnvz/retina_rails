@@ -28,9 +28,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'coveralls'
 
 
-  if RUBY_VERSION < "1.9.3"
-    gem.add_dependency 'rails', '>= 3.2.0', '< 4.0.0'
-  else
-    gem.add_dependency 'rails', '>= 3.0'
-  end
+  gem.add_dependency 'rails', '>= 3.2.0', '< 4.0.0'
 end
