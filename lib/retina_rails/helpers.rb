@@ -2,22 +2,26 @@ module ActionView
   module Helpers
     module AssetTagHelper
 
-      def image_tag_with_retina(source, options={})
-        retina = options.delete(:retina)
+      ##
+      # Displays a version of an upload and sets stored width and height attributes
+      #
+      # === Parameters
+      #
+      # [model (Model)] model instance
+      # [mounted_as (Sym)] attribute to which uploader is mounted
+      # [version (Sym)] version of the upload
+      # [options (Hash)] optional options hash
+      #
+      # === Examples
+      #
+      # retina_image_tag(@user, :avatar, :small)
+      #
+      def retina_image_tag(model, mounted_as, version, options={})
+        dimensions = model.retina_dimensions[mounted_as.to_sym][version.to_sym]
+        options    = dimensions.merge(options)
 
-        if retina
-          retina_source = source.to_s
-          retina_source = retina_source.split('.')
-          filename      = retina_source.slice!(-2)
-          retina_source = retina_source.insert(-2, "#{filename}@2x").join('.')
-
-          options[:data] ||= {}
-          options[:data].merge!(:at2x => path_to_image(retina_source))
-        end
-
-        image_tag_without_retina(source, options)
+        image_tag(model.send(mounted_as).url(version), options)
       end
-      alias_method_chain :image_tag, :retina
 
     end
   end
