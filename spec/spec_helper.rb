@@ -25,12 +25,10 @@ ActiveRecord::Base.establish_connection(
   :database => File.dirname(__FILE__) + "/fixtures/db/retina_rails.sqlite3"
 )
 
-## Load support files
-
-Dir["spec/support/**/*.rb"].each { |f| load f }
-
 ## Load rspec rails after initializing rails app
 
+load 'spec/support/rails.rb'
+load 'spec/support/schema.rb'
 require 'rspec/rails'
 
 ## Load retina_rails
@@ -38,6 +36,10 @@ require 'rspec/rails'
 require 'retina_rails'
 
 RetinaRails::Strategies.include_strategies
+
+## Load support files
+
+load 'spec/support/carrierwave.rb'
 
 RSpec.configure do |config|
   config.fixture_path = "#{File.dirname(__FILE__)}/fixtures"

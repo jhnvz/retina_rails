@@ -21,15 +21,46 @@ module RetinaRails
 
         module ClassMethods
 
+          ##
+          # Adds a new version to this uploader
+          #
+          # === Parameters
+          #
+          # [name (#to_sym)] name of the version
+          # [options (Hash)] optional options hash
+          # [&block (Proc)] a block to eval on this version of the uploader
+          #
+          # === Examples
+          #
+          #     class MyUploader < CarrierWave::Uploader::Base
+          #
+          #       retina!
+          #
+          #       version :thumb do
+          #         process :resize_to_fill => [30, 30]
+          #         process :retina_quality => 25
+          #       end
+          #
+          #       version :thumb, :retina => false do
+          #         process :resize_to_fill => [30, 30]
+          #       end
+          #
+          #     end
+          #
           def version(name, options={}, &block)
             super
 
-            retina_version name unless options[:retina] == false
+            optimize_retina! name unless options[:retina] == false
           end
 
-          # Define a retina version
-          # This method will simply copy all settings and add a larger (retina) version
-          def retina_version(name)
+          ##
+          # Optimize version for retina displays
+          #
+          # === Parameters
+          #
+          # [name (Sym)] name of the version
+          #
+          def optimize_retina!(name)
             config = versions[name]
 
             processors = config[:uploader].processors.dup
@@ -43,18 +74,19 @@ module RetinaRails
             ## Define a retina version if processor is present
             if dimensions_processor
 
-              options = dimensions_processor[1].dup
+              dimensions = dimensions_processor[1].dup
 
-              width  = options[0] * 2
-              height = options[1] * 2
+              width  = dimensions[0] * 2
+              height = dimensions[1] * 2
 
-              2.times { options.delete_at(0) }
+              2.times { dimensions.delete_at(0) }
 
-              options.insert(0, height)
-              options.insert(0, width)
+              dimensions.insert(0, height)
+              dimensions.insert(0, width)
 
-              version "#{name}_retina", :retina => false do
-                process dimensions_processor[0] => options
+              ## Override version with double height and width
+              version name, :retina => false do
+                process dimensions_processor[0] => dimensions
 
                 quality_processor = nil
 
@@ -67,31 +99,54 @@ module RetinaRails
 
                 ## Set default quality if retina_quality is not defined
                 process :retina_quality => 40 if quality_processor.nil?
+
+                ## Store dimensions
+                process :store_retina_dimensions
               end
             end
           end
 
         end
 
-        ## Set the correct filename for storage according to the convention (append @2x to filename)
-        def full_filename(for_file)
-          super.tap do |file_name|
-            file_name.sub!(/(.*)\./, '\1@2x.').gsub!('retina_', '') if version_name.to_s.include?('retina')
+        ##
+        # Stores the original dimensions of the image as a serialized Hash in to the model
+        #
+        def store_retina_dimensions
+          if model
+            model.class.serialize :retina_dimensions ## Serialize dimensions on model
+
+            width, height = `identify -format "%wx%h" #{file.path}`.split(/x/) ## Read dimensions
+
+            ## Set original height and width attributes on model
+
+            model.retina_dimensions = (model.retina_dimensions.try(:value) || {}).merge!(
+              mounted_as => {
+                version_name => {
+                  :width  => width.to_i  / 2,
+                  :height => height.to_i / 2
+                }
+              }
+            )
           end
         end
 
-        ## Set retina image quality
+        ##
+        # Process retina quality of the image.
+        # Works with ImageMagick and MiniMagick
+        #
+        # === Parameters
+        #
+        # [percentage (Int)] quality in percentage
+        #
         def retina_quality(percentage)
-          if version_name.to_s.include?('retina')
-            manipulate! do |img|
-              if defined?(Magick)
-                img.write(current_path) { self.quality = percentage } unless img.quality == percentage
-              elsif defined?(MiniMagick)
-                img.quality(percentage.to_s)
-              end
-              img = yield(img) if block_given?
-              img
+          manipulate! do |img|
+            if defined?(Magick)
+              img.write(current_path) { self.quality = percentage } unless img.quality == percentage
+            elsif defined?(MiniMagick)
+              img.quality(percentage.to_s)
             end
+            img = yield(img) if block_given?
+            img
           end
         end
 
