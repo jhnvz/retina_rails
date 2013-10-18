@@ -4,27 +4,32 @@ describe RetinaRails::Strategies::CarrierWave do
 
   include CarrierWave::Test::Matchers
 
-  ## Store image so we can run tests against it
-
+  ##
+  # Store image so we can run tests against it
+  #
   def upload!
     AnonymousUploader.enable_processing = true
     @uploader = AnonymousUploader.new(CarrierWaveUpload.new, :avatar)
     @uploader.store!(File.open("#{fixture_path}/images/avatar.jpeg"))
   end
 
-  ## Remove image after testing
-
+  ##
+  # Remove image after testing
+  #
   after(:each) do
     AnonymousUploader.enable_processing = false
     @uploader.remove!
     AnonymousUploader.versions[:small][:uploader].processors = [] ## Reset processors
   end
 
-  ## Actual tests
-
+  ##
+  # Actual tests
+  #
   context 'with dimensions processor' do
 
-    ## Setup Anonymous uploader with a resize processor
+    ##
+    # Setup Anonymous uploader with a resize processor
+    #
     before(:each) do
       AnonymousUploader.class_eval do
         version :small do
@@ -51,7 +56,9 @@ describe RetinaRails::Strategies::CarrierWave do
 
   context 'override quality' do
 
-    ## Setup Anonymous uploader with a resize processor and override quality
+    ##
+    # Setup Anonymous uploader with a resize processor and override quality
+    #
     before(:each) do
       AnonymousUploader.class_eval do
         version :small do
@@ -71,7 +78,9 @@ describe RetinaRails::Strategies::CarrierWave do
 
   context 'multiple processors' do
 
-    ## Setup Anonymous uploader with a custom processor
+    ##
+    # Setup Anonymous uploader with a custom processor
+    #
     before(:each) do
       AnonymousUploader.class_eval do
         version :small do
