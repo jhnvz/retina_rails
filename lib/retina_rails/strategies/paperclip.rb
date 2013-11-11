@@ -29,6 +29,12 @@ module RetinaRails
 
         module ClassMethods
 
+          def has_mongoid_attached_file(name, options={})
+            super
+
+            has_attached_retina_file name if options[:retina]
+          end
+
           def has_attached_file(name, options={})
             super
 
@@ -61,13 +67,25 @@ module RetinaRails
 
                 dimensions = value.kind_of?(Array) ? value[0] : value
 
+                if dimensions.class == Hash
+                  is_hash = true
+                  format = dimensions[:format]
+                  dimensions = dimensions[:geometry]
+                end
+                
                 width  = dimensions.scan(/\d+/)[0].to_i * 2
                 height = dimensions.scan(/\d+/)[1].to_i * 2
 
                 processor = dimensions.scan(/#|</).first
 
+
                 new_dimensions = "#{width}x#{height}#{processor}"
-                retina_styles["#{key}_retina".to_sym] = value.kind_of?(Array) ? [new_dimensions, value[1]] : new_dimensions
+
+                retina_styles["#{key}_retina".to_sym] = if is_hash
+                   {:geometry => value.kind_of?(Array) ? [new_dimensions, value[1]] : new_dimensions, :format => format}
+                else
+                   value.kind_of?(Array) ? [new_dimensions, value[1]] : new_dimensions
+                end
 
                 ## Set quality convert option
                 convert_option = convert_options[key] if convert_options
@@ -89,8 +107,9 @@ module RetinaRails
 
               ## Make url work with retina optimization
               original_url = attachment[:url]
-              attachment[:url] = Extensions.optimize_path(original_url) if original_url
-
+              if original_url != ':s3_alias_url'
+                attachment[:url] = Extensions.optimize_path(original_url) if original_url
+              end
             end
           end
 
