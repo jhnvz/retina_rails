@@ -2,20 +2,6 @@ module RetinaRails
   module Strategies
     module Paperclip
 
-      module Base
-
-        extend ActiveSupport::Concern
-
-        module ClassMethods
-
-          def retina!
-            include Uploader
-          end
-
-        end
-
-      end
-
       module Uploader
 
         extend ActiveSupport::Concern
@@ -125,6 +111,15 @@ module RetinaRails
 
       end
 
+    end
+  end
+end
+
+module Paperclip
+  module Glue
+    def self.included(base)
+      super
+      base.send :include, RetinaRails::Strategies::Paperclip::Uploader
     end
   end
 end
