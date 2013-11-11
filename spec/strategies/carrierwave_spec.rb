@@ -1,3 +1,4 @@
+require 'stringio'
 require 'spec_helper'
 
 class AnonymousUploader < CarrierWave::Uploader::Base
@@ -175,6 +176,21 @@ describe RetinaRails::Strategies::CarrierWave do
 
     it { File.basename(@uploader.small_custom_processor_retina.current_path, 'jpeg').should include '@2x'}
     it { File.basename(@uploader.small_custom_processor_retina.current_path, 'jpeg').should_not include 'retina_'}
+
+  end
+
+  context 'file without extension name' do
+
+    before do
+      AnonymousUploader.enable_processing = true
+      @uploader = AnonymousUploader.new(CarrierWaveUpload.new, :avatar)
+      stream = FileStringIO.new('avatar', File.read("#{fixture_path}/images/avatar.jpeg"))
+      @uploader.store!(stream)
+    end
+
+    it { File.basename(@uploader.small.current_path, 'jpeg').should include 'small_'}
+    it { File.basename(@uploader.small_retina.current_path, 'jpeg').should include '@2x'}
+    it { File.basename(@uploader.small_retina.current_path, 'jpeg').should_not include 'retina_'}
 
   end
 

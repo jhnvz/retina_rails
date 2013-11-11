@@ -72,6 +72,16 @@ describe RetinaRails::Strategies::Paperclip do
 
   end
 
+  context 'file without extension name' do
+
+    let!(:stream) { FileStringIO.new('avatar', File.read("#{fixture_path}/images/avatar.jpeg")) }
+    subject       { PaperclipUpload.create(:avatar => stream) }
+
+    it { subject.avatar.url(:big).should == "#{ROOT}/paperclip_uploads/#{subject.id}/avatar_big.jpg" }
+    it { subject.avatar.url(:big_retina).should == "#{ROOT}/paperclip_uploads/#{subject.id}/avatar_big@2x.jpg" }
+
+  end
+
   context 'with retina quality' do
 
     subject { PaperclipUpload.create(:avatar => File.open("#{fixture_path}/images/avatar.jpeg")) }
@@ -90,7 +100,7 @@ describe RetinaRails::Strategies::Paperclip do
 
   end
 
-  describe :optimze_path do
+  describe :optimize_path do
 
     subject { RetinaRails::Strategies::Paperclip::Uploader::Extensions }
 
