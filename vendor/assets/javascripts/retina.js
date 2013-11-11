@@ -102,6 +102,7 @@
         that.el.setAttribute('width', that.el.offsetWidth);
         that.el.setAttribute('height', that.el.offsetHeight);
         that.el.setAttribute('src', path);
+        that.el.setAttribute('data-retina', true);
       }
     }
     load();
