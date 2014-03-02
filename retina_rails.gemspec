@@ -23,7 +23,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec', '>= 2.3'
   gem.add_development_dependency 'rspec-rails', '~> 2.0'
   gem.add_development_dependency 'carrierwave'
-  gem.add_development_dependency 'paperclip'
+  gem.add_development_dependency 'paperclip', '< 4.0'
   gem.add_development_dependency 'rmagick'
   gem.add_development_dependency 'sqlite3'
   gem.add_development_dependency 'coveralls'
