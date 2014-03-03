@@ -21,7 +21,7 @@ describe RetinaRails::Strategies::Paperclip do
   # Make sure image get's destroyed after each test
   #
   after(:each) do
-    @upload.destroy
+    @upload.destroy if @upload
   end
 
   context 'defaults' do
