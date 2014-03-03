@@ -108,4 +108,26 @@ describe RetinaRails::Strategies::CarrierWave do
 
   end
 
+  context 'with failing conditional version' do
+
+    ##
+    # Setup Anonymous uploader with a failing condition
+    #
+    before(:each) do
+      AnonymousUploader.class_eval do
+        version :small_conditional, :if => ->(img, opts) { false } do
+          process :resize_to_fill => [30, 30]
+        end
+      end
+
+      upload!
+    end
+
+    it 'should not create a version' do
+      @uploader.version_exists?(:small_conditional).should be_false
+      @uploader.small_conditional.current_path.should_not be_present
+    end
+
+  end
+
 end

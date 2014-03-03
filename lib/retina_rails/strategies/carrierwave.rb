@@ -86,7 +86,7 @@ module RetinaRails
               dimensions.insert(0, width)
 
               ## Override version with double height and width
-              version name, :retina => false do
+              version name, options do
                 process dimensions_processor[0] => dimensions
 
                 quality_processor = nil
