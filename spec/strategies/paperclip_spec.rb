@@ -1,126 +1,111 @@
 require 'spec_helper'
 
-ROOT = File.dirname(__FILE__)
-
-class PaperclipUpload < ActiveRecord::Base
-
-  retina!
-
-  has_attached_file :avatar,
-    :styles => {
-       :original => ["800x800", :jpg],
-       :big => ["125x125#", :jpg]
-     },
-     :retina => { :quality => 60 },
-     :path => "#{ROOT}/:class/:id/:basename_:style.:extension",
-     :url => "#{ROOT}/:class/:id/:basename_:style.:extension"
-
-  has_attached_file :avatar_without_quality,
-    :styles => {
-       :original => ["800x800", :jpg],
-       :big => ["125x125#", :jpg]
-     },
-     :retina => true,
-     :path => "#{ROOT}/:class/:id/:basename_:style.:extension",
-     :url => "#{ROOT}/:class/:id/:basename_:style.:extension"
-
-  has_attached_file :avatar_string_styles,
-    :styles => {
-        :original => "800x800",
-        :big => "125x125#"
-    },
-    :retina => true,
-    :path => "#{ROOT}/:class/:id/:basename_:style.:extension",
-    :url => "#{ROOT}/:class/:id/:basename_:style.:extension"
-end
-
 describe RetinaRails::Strategies::Paperclip do
 
-  subject { PaperclipUpload }
-
-  context 'overriding options' do
-
-    it { subject.attachment_definitions[:avatar][:styles][:original_retina].should == ['1600x1600', :jpg] }
-    it { subject.attachment_definitions[:avatar][:styles][:big_retina].should == ['250x250#', :jpg] }
-
-    it { subject.attachment_definitions[:avatar][:path].should == "#{ROOT}/:class/:id/:basename_:style:retina.:extension" }
-    it { subject.attachment_definitions[:avatar][:url].should == "#{ROOT}/:class/:id/:basename_:style:retina.:extension" }
-
+  ##
+  # Store image so we can run tests against it
+  #
+  def upload!
+    @upload = PaperclipUpload.new(:avatar => File.open("#{fixture_path}/images/avatar.jpeg"))
+    @upload.save
   end
 
-  context 'uploads' do
-
-    subject { PaperclipUpload.create(:avatar => File.open("#{fixture_path}/images/avatar.jpeg")) }
-
-    it { subject.avatar.url(:big).should == "#{ROOT}/paperclip_uploads/#{subject.id}/avatar_big.jpg" }
-    it { subject.avatar.url(:big_retina).should == "#{ROOT}/paperclip_uploads/#{subject.id}/avatar_big@2x.jpg" }
-
-    it { Paperclip::Geometry.from_file(subject.avatar.url(:big)).to_s.should == '125x125' }
-    it { Paperclip::Geometry.from_file(subject.avatar.url(:big_retina)).to_s.should == '250x250' }
-
+  ##
+  # Return image path so we can open image
+  #
+  def image_path
+    "#{File.dirname(__FILE__).gsub('spec/strategies', 'public')}#{@upload.avatar.url(:big)}"
   end
 
-  context 'uploads with string styles' do
-
-    subject { PaperclipUpload.create(:avatar_string_styles => File.open("#{fixture_path}/images/avatar.jpeg")) }
-
-    it { subject.avatar_string_styles.url(:big).should == "#{ROOT}/paperclip_uploads/#{subject.id}/avatar_big.jpeg" }
-    it { subject.avatar_string_styles.url(:big_retina).should == "#{ROOT}/paperclip_uploads/#{subject.id}/avatar_big@2x.jpeg" }
-
-    it { Paperclip::Geometry.from_file(subject.avatar_string_styles.url(:big)).to_s.should == '125x125' }
-    it { Paperclip::Geometry.from_file(subject.avatar_string_styles.url(:big_retina)).to_s.should == '250x250' }
-
+  ##
+  # Make sure image get's destroyed after each test
+  #
+  after(:each) do
+    @upload.destroy
   end
 
-  context 'with retina quality' do
+  context 'defaults' do
 
-    subject { PaperclipUpload.create(:avatar => File.open("#{fixture_path}/images/avatar.jpeg")) }
-
-    it { Magick::Image.read(subject.avatar.url(:big)).first.quality.should == 84 }
-    it { Magick::Image.read(subject.avatar.url(:big_retina)).first.quality.should == 60 }
-
-  end
-
-  context 'without retina quality' do
-
-    subject { PaperclipUpload.create(:avatar_without_quality => File.open("#{fixture_path}/images/avatar.jpeg")) }
-
-    it { Magick::Image.read(subject.avatar_without_quality.url(:big)).first.quality.should == 84 }
-    it { Magick::Image.read(subject.avatar_without_quality.url(:big_retina)).first.quality.should == 40 }
-
-  end
-
-  describe :optimze_path do
-
-    subject { RetinaRails::Strategies::Paperclip::Uploader::Extensions }
-
-    it { subject.optimize_path('/:filename').should == '/:basename:retina.:extension' }
-
-    it { subject.optimize_path('/:basename.:extension').should == '/:basename:retina.:extension' }
-
-  end
-
-  describe :override_default_options do
-
-    context 'Paperclip default' do
-
-      before { RetinaRails::Strategies::Paperclip::Uploader::Extensions.override_default_options }
-
-      it { Paperclip::Attachment.default_options[:url].should == '/system/:class/:attachment/:id_partition/:style/:basename:retina.:extension' }
-
+    before(:each) do
+      PaperclipUpload.class_eval do
+        has_attached_file :avatar,
+          :styles => {
+             :big      => ["30x40#", :jpg],
+             :original => ["800x800", :jpg]
+           }
+      end
+      upload!
     end
 
-    context 'User defined paperclip default' do
+    it 'should double the height and width of an image' do
+      Paperclip::Geometry.from_file(image_path).to_s.should == '60x80'
+    end
 
-      before do
+    it 'should store original width and height attributes for version' do
+      @upload.retina_dimensions[:avatar][:big].should == { :width => 30, :height => 40 }
+    end
 
-        Paperclip::Attachment.default_options[:url] = '/:class/:attachment/:id/:style/:basename.:extension'
-        RetinaRails::Strategies::Paperclip::Uploader::Extensions.override_default_options
+    it "should set quality to it's default 40%" do
+      quality = Magick::Image.read(image_path).first.quality
+      quality.should == 40
+    end
 
+  end
+
+  context 'file without extension name' do
+
+    it 'should not fail' do
+      stream  = FileStringIO.new('avatar', File.read("#{fixture_path}/images/avatar.jpeg"))
+      @upload = PaperclipUpload.create(:avatar => stream)
+    end
+
+  end
+
+  context 'with string styles' do
+
+    before(:each) do
+      PaperclipUpload.class_eval do
+        has_attached_file :avatar,
+          :styles => {
+             :big      => "30x40#",
+             :original => "800x800"
+           }
       end
+      upload!
+    end
 
-      it { Paperclip::Attachment.default_options[:url].should == '/:class/:attachment/:id/:style/:basename:retina.:extension' }
+    it 'should double the height and width of an image' do
+      Paperclip::Geometry.from_file(image_path).to_s.should == '60x80'
+    end
 
+    it 'should store original width and height attributes for version' do
+      @upload.retina_dimensions[:avatar][:big].should == { :width => 30, :height => 40 }
+    end
+
+    it "should set quality to it's default 40%" do
+      quality = Magick::Image.read(image_path).first.quality
+      quality.should == 40
+    end
+
+  end
+
+  context 'override quality' do
+
+    before(:each) do
+      PaperclipUpload.class_eval do
+        has_attached_file :avatar,
+          :styles => {
+             :big      => ["30x40#", :jpg],
+             :original => ["800x800", :jpg]
+           },
+           :retina => { :quality => 25 }
+      end
+      upload!
+    end
+
+    it "should set quality to it's default 40%" do
+      quality = Magick::Image.read(image_path).first.quality
+      quality.should == 25
     end
 
   end

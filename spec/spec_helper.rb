@@ -40,6 +40,8 @@ RetinaRails::Strategies.include_strategies
 ## Load support files
 
 load 'spec/support/carrierwave.rb'
+load 'spec/support/paperclip.rb'
+load 'spec/support/file_string_io.rb'
 
 RSpec.configure do |config|
   config.fixture_path = "#{File.dirname(__FILE__)}/fixtures"

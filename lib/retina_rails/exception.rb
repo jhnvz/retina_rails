@@ -8,8 +8,8 @@ module RetinaRails
       self.message = message
     end
 
-  end
+  end # Exception < StandardError
 
   class DeprecationError < Exception; end
 
-end
+end # RetinaRails

@@ -13,5 +13,5 @@ module RetinaRails
       end
     end
 
-  end
-end
+  end # Strategies
+end # RetinaRails

@@ -23,6 +23,6 @@ module ActionView
         image_tag(model.send(mounted_to).url(version), options)
       end
 
-    end
-  end
-end
+    end # AssetTagHelper
+  end # Helpers
+end # ActionView

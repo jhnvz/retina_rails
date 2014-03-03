@@ -11,9 +11,9 @@ module RetinaRails
             include Uploader
           end
 
-        end
+        end # ClassMethods
 
-      end
+      end # Base
 
       module Uploader
 
@@ -106,7 +106,7 @@ module RetinaRails
             end
           end
 
-        end
+        end # ClassMethods
 
         ##
         # Stores the original dimensions of the image as a serialized Hash in to the model
@@ -119,7 +119,7 @@ module RetinaRails
 
             ## Set original height and width attributes on model
 
-            model.retina_dimensions = (model.retina_dimensions.try(:value) || {}).merge!(
+            model.retina_dimensions = (model.retina_dimensions.try(:value) || {}).deep_merge!(
               mounted_as => {
                 version_name => {
                   :width  => width.to_i  / 2,
@@ -150,7 +150,7 @@ module RetinaRails
           end
         end
 
-      end
-    end
-  end
-end
+      end # Uploader
+    end # CarrierWave
+  end # Strategies
+end # RetinaRails
