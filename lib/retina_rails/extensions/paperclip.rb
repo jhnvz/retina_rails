@@ -1,9 +1,8 @@
 module Paperclip
   class Style
 
-    # Supplies the hash of options that processors expect to receive as their second argument
-    # Arguments other than the standard geometry, format etc are just passed through from
-    # initialization and any procs are called here, just before post-processing.
+    # Make sure to add the current style being processed to the args
+    # so we can identify which style is being processed
     def processor_options
       args = {}
       @other_args.each do |k,v|

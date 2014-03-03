@@ -50,7 +50,7 @@ module RetinaRails
           def version(name, options={}, &block)
             super
 
-            optimize_retina! name unless options[:retina] == false
+            optimize_retina!(name, { :if => options[:if] }) unless options[:retina] == false
           end
 
           ##
@@ -60,8 +60,9 @@ module RetinaRails
           #
           # [name (Sym)] name of the version
           #
-          def optimize_retina!(name)
+          def optimize_retina!(name, options={})
             config = versions[name]
+            options[:retina] = false
 
             processors = config[:uploader].processors.dup
             dimensions_processor = nil
