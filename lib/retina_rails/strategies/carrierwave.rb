@@ -24,13 +24,14 @@ module RetinaRails
           def version(name, options={}, &block)
             super
 
-            retina_version name unless options[:retina] == false
+            retina_version(name, { :if => options[:if] }) unless options[:retina] == false
           end
 
           # Define a retina version
           # This method will simply copy all settings and add a larger (retina) version
-          def retina_version(name)
+          def retina_version(name, options={})
             config = versions[name]
+            options[:retina] = false
 
             processors = config[:uploader].processors.dup
             dimensions_processor = nil
@@ -43,18 +44,18 @@ module RetinaRails
             ## Define a retina version if processor is present
             if dimensions_processor
 
-              options = dimensions_processor[1].dup
+              processor_options = dimensions_processor[1].dup
 
-              width  = options[0] * 2
-              height = options[1] * 2
+              width  = processor_options[0] * 2
+              height = processor_options[1] * 2
 
-              2.times { options.delete_at(0) }
+              2.times { processor_options.delete_at(0) }
 
-              options.insert(0, height)
-              options.insert(0, width)
+              processor_options.insert(0, height)
+              processor_options.insert(0, width)
 
-              version "#{name}_retina", :retina => false do
-                process dimensions_processor[0] => options
+              version "#{name}_retina", options do
+                process dimensions_processor[0] => processor_options
 
                 quality_processor = nil
 

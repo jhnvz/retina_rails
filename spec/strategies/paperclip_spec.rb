@@ -2,6 +2,8 @@ require 'spec_helper'
 
 ROOT = File.dirname(__FILE__)
 
+Paperclip::Attachment.default_options[:use_timestamp] = false
+
 class PaperclipUpload < ActiveRecord::Base
 
   retina!

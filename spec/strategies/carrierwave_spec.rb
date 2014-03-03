@@ -38,6 +38,10 @@ class AnonymousUploader < CarrierWave::Uploader::Base
     process :resize_to_fill_with_gravity => [200, 200, 'North', :jpg, 40]
   end
 
+  version :small_with_failing_conditional, :if => ->(img, opts) { false } do
+    process :resize_to_fill => [30, 30]
+  end
+
   def desaturate
     manipulate! do |img|
       img = img.quantize 256, Magick::GRAYColorspace
@@ -146,6 +150,13 @@ describe RetinaRails::Strategies::CarrierWave do
 
     its(:versions) { should include :small_without_processor }
     its(:versions) { should_not include :small_without_processor_retina }
+
+  end
+
+  context 'with failing conditional version' do
+
+    it { @uploader.version_exists?(:small_with_failing_conditional).should == false }
+    it { @uploader.small_with_failing_conditional.current_path.should_not be_present }
 
   end
 
