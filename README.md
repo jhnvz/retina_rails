@@ -17,6 +17,7 @@ Resources
 - [Installation](#installation)
 - [Migrations](#migrations)
 - [Carrierwave](#carrierwave)
+ - [Custom resize processors](#custom-resize-processors)
 - [Paperclip](#paperclip)
 - [Displaying a retina image](#displaying-a-retina-image)
 - [Upgrading](#upgrading)
@@ -67,6 +68,25 @@ end
 ```
 
 By default it sets the retina image quality to 40 which can be overriden with `process :retina_quality => 25`. To disable the creation of a retina version simply call `version :small, :retina => false`.
+
+### Custom resize processors
+
+You can also use your custom resize processors like so:
+
+```ruby
+class ExampleUploader < CarrierWave::Uploader::Base
+
+  retina!
+
+  version :small, :retina => false do
+    process :resize_to_fill_with_gravity => [200, 200, 'North', :jpg, 75]
+    process :store_retina_dimensions
+  end
+
+end
+```
+
+Make sure you double the image size yourself in your processor. In this example the image will be displayed with a size of 100x100.
 
 
 Paperclip
