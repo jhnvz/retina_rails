@@ -13,10 +13,9 @@ lib/bundler/man
 pkg
 rdoc
 spec/reports
-spec/paperclip_uploads
-spec/retina_rails/strategies/paperclip_uploads
 test/tmp
 test/version_tmp
 tmp
 log
 uploads
+public
