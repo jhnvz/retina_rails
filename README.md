@@ -30,7 +30,7 @@ Installation
 Migrations
 ------------
 
-Add a text column named `retina_dimensions`. In this column we'll store the original dimensions of the uploaded images.
+Add a text column named `retina_dimensions`. This column is used to store original dimensions of the images.
 
 ```ruby
 class AddRetinaDimensionsColumnsToUsers < ActiveRecord::Migration
