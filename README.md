@@ -118,7 +118,7 @@ Displaying a retina image
 retina_image_tag(@user, :image, :small, :default => { :width => 50, :height => 40 })
 ```
 
-If no image is uploaded (yet) it will display the default image setup in CarrierWave or Paperclip and set the width and height attributes specified in the default option.
+If no image is uploaded (yet) it will display the default image defined with CarrierWave or Paperclip and set the width and height attributes specified in the default option.
 
 **Voila! Now you're using Retina Rails.**
 
