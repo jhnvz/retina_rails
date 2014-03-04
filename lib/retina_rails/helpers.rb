@@ -14,11 +14,20 @@ module ActionView
       #
       # === Examples
       #
-      # retina_image_tag(@user, :avatar, :small)
+      # retina_image_tag(@user, :avatar, :small, :default => { :width => 300, :height => 200 })
       #
       def retina_image_tag(model, mounted_to, version, options={})
-        dimensions = model.retina_dimensions[mounted_to.to_sym][version.to_sym]
-        options    = dimensions.merge(options)
+        default_dimensions = options.delete(:default)
+
+        # Check if we can find the dimensions of the uploaded image.
+        # If no image or dimensions available use default.
+        if model.retina_dimensions.kind_of?(Hash) && model.retina_dimensions[mounted_to.to_sym]
+          dimensions = model.retina_dimensions[mounted_to.to_sym][version.to_sym]
+        else
+          dimensions = default_dimensions
+        end
+
+        options = dimensions.merge(options)
 
         image_tag(model.send(mounted_to).url(version), options)
       end

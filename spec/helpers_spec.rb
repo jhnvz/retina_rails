@@ -35,16 +35,45 @@ describe ActionView::Helpers::AssetTagHelper, :type => :helper do
 
   describe :retina_image_tag do
 
-    it 'should set correct width and height' do
-      image = helper.retina_image_tag(Upload.new, :avatar, :small)
+    context 'with dimensions present' do
 
-      image.should include('width="40"')
-      image.should include('height="30"')
+      it 'should set correct width and height' do
+        image = helper.retina_image_tag(Upload.new, :avatar, :small)
+
+        image.should include('width="40"')
+        image.should include('height="30"')
+      end
+
+      it 'should be able to add a class' do
+        image = helper.retina_image_tag(Upload.new, :avatar, :small, :class => 'foo')
+        image.should include('class="foo"')
+      end
+
     end
 
-    it 'should be able to add a class' do
-      image = helper.retina_image_tag(Upload.new, :avatar, :small, :class => 'foo')
-      image.should include('class="foo"')
+    context 'without dimensions present' do
+
+      before(:each) { Upload.any_instance.stub(:retina_dimensions).and_return(nil) }
+
+      it 'should set correct width and height' do
+        image = helper.retina_image_tag(Upload.new, :avatar, :small, :default => { :width => 25, :height => 40 })
+
+        image.should include('width="25"')
+        image.should include('height="40"')
+      end
+
+      it 'should be able to add a class' do
+        image = helper.retina_image_tag(Upload.new, :avatar, :small, :default => { :width => 25, :height => 40 }, :class => 'foo')
+
+        image.should include('class="foo"')
+      end
+
+      it 'should strip default attributes' do
+        image = helper.retina_image_tag(Upload.new, :avatar, :small, :default => { :width => 25, :height => 40 })
+
+        image.should_not include('default')
+      end
+
     end
 
   end
