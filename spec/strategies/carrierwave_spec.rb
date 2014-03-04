@@ -108,6 +108,38 @@ describe RetinaRails::Strategies::CarrierWave do
 
   end
 
+  context 'with custom resize processor' do
+
+    ##
+    # Setup Anonymous uploader with a custom resize processor
+    #
+    before(:each) do
+      AnonymousUploader.class_eval do
+        version :small, :retina => false do
+          process :custom_resize => [200, 200]
+          process :store_retina_dimensions
+        end
+
+        def custom_resize(width, height)
+          manipulate! do |img|
+            img.resize_to_fill!(width, height)
+          end
+        end
+      end
+
+      upload!
+    end
+
+    it 'should double the height and width of an image' do
+      @uploader.small.should have_dimensions(200, 200)
+    end
+
+    it 'should store original width and height attributes for version' do
+      @uploader.model.retina_dimensions.value[:avatar][:small].should == { :width => 100, :height => 100 }
+    end
+
+  end
+
   context 'with failing conditional version' do
 
     ##
