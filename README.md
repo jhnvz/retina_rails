@@ -7,7 +7,19 @@ Makes your life easier optimizing an application for retina displays.
 How it works
 ------------
 
-Retina Rails makes your application use high-resolution images by default. It automatically optimizes uploaded images (CarrierWave or Paperclip) for retina displays by making them twice the size and reducing the quality. 
+Retina Rails makes your application use high-resolution images by default. It automatically optimizes uploaded images (CarrierWave or Paperclip) for retina displays by making them twice the size and reducing the quality.
+
+*Good source on setting up quality: http://www.netvlies.nl/blog/design-interactie/retina-revolution*
+
+Resources
+------------
+
+- [Installation](#installation)
+- [Migrations](#migrations)
+- [Carrierwave](#carrierwave)
+- [Paperclip](#paperclip)
+- [Displaying a retina image](#displaying-a-retina-image)
+- [Upgrading](#upgrading)
 
 Installation
 ------------
@@ -106,6 +118,11 @@ retina_image_tag(@user, :avatar, :small)
 ```
 
 Voila! Now you're using Retina Rails.
+
+Upgrading
+------------
+
+How to upgrade from version 1 to 2
 
 Supported Ruby Versions
 ------------
