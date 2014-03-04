@@ -68,26 +68,6 @@ end
 
 By default it sets the retina image quality to 40 which can be overriden with `process :retina_quality => 25`. To disable the creation of a retina version simply call `version :small, :retina => false`.
 
-### Custom processors
-
-You can also use your custom processors like so:
-
-```ruby
-class ExampleUploader < CarrierWave::Uploader::Base
-
-  retina!
-
-  version :small, :retina => false do
-    process :resize_to_fill_with_gravity => [100, 100, 'North', :jpg, 75]
-  end
-
-  version :small_retina, :retina => false do
-    process :resize_to_fill_with_gravity => [200, 200, 'North', :jpg, 40]
-  end
-
-end
-```
-
 
 Paperclip
 ------------
@@ -102,22 +82,25 @@ class ExampleUploader < ActiveRecord::Base
   has_attached_file :image,
     :styles => {
        :original => ["800x800", :jpg],
-       :big => ["125x125#", :jpg]
+       :small => ["125x125#", :jpg]
      },
      :retina => { :quality => 25 } # Optional
 
 end
 ```
+
 By default it sets the retina image quality to 40 which can be overriden by adding a `quality` option. To disable the creation of a retina version set the `retina` option to false `:retina => false`.
 
 Displaying a retina image
 ------------
 
 ```ruby
-retina_image_tag(@user, :avatar, :small)
+retina_image_tag(@user, :image, :small, :default => { :width => 50, :height => 40 }))
 ```
 
-Voila! Now you're using Retina Rails.
+If no image is uploaded (yet) it will display the default image setup in CarrierWave or Paperclip and set the width and height attributes specified in the default option.
+
+**Voila! Now you're using Retina Rails.**
 
 Upgrading
 ------------
