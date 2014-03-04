@@ -84,7 +84,7 @@ class ExampleUploader < ActiveRecord::Base
        :original => ["800x800", :jpg],
        :small => ["125x125#", :jpg]
      },
-     :retina => { :quality => 25 } # Optional
+     :retina => { :quality => 25 }
 
 end
 ```
@@ -95,7 +95,7 @@ Displaying a retina image
 ------------
 
 ```ruby
-retina_image_tag(@user, :image, :small, :default => { :width => 50, :height => 40 }))
+retina_image_tag(@user, :image, :small, :default => { :width => 50, :height => 40 })
 ```
 
 If no image is uploaded (yet) it will display the default image setup in CarrierWave or Paperclip and set the width and height attributes specified in the default option.
