@@ -9,7 +9,7 @@ How it works
 
 Retina Rails makes your application use high-resolution images by default. It automatically optimizes uploaded images (CarrierWave or Paperclip) for retina displays by making them twice the size and reducing the quality.
 
-*Good source on setting up quality: http://www.netvlies.nl/blog/design-interactie/retina-revolution*
+*Good source on setting up image quality: http://www.netvlies.nl/blog/design-interactie/retina-revolution*
 
 Resources
 ------------
