@@ -21,6 +21,8 @@ Resources
 - [Paperclip](#paperclip)
 - [Displaying a retina image](#displaying-a-retina-image)
 - [Upgrading](#upgrading)
+ - [Carrierwave](#carrierwave-1) 
+ - [Paperclip](#paperclip-1) 
 
 Installation
 ------------
@@ -118,14 +120,31 @@ Displaying a retina image
 retina_image_tag(@user, :image, :small, :default => { :width => 50, :height => 40 })
 ```
 
-If no image is uploaded (yet) it will display the default image setup in CarrierWave or Paperclip and set the width and height attributes specified in the default option.
+If no image is uploaded (yet) it will display the default image defined with CarrierWave or Paperclip and set the width and height attributes specified in the default option.
 
 **Voila! Now you're using Retina Rails.**
 
 Upgrading
 ------------
 
-How to upgrade from version 1 to 2
+1. Add a text column named `retina_dimensions` to all your models that have images attached to it. See [Migrations](#migrations) for an example.
+2. Reprocess all your images:
+
+   ### Carrierwave
+
+   For every model using CarrierWave run:
+
+   ```ruby
+   Model.find_each do |model|
+     model.image.recreate_versions!
+   end
+   ```
+
+   Or create a rake task that will do the trick for you.
+
+   ### Paperclip
+
+   Run `rake paperclip:refresh`
 
 Supported Ruby Versions
 ------------
