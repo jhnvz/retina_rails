@@ -8,7 +8,7 @@ Since the whole strategy for displaying images has changed there are some things
 
 You'll need to add a `retina_dimensions` column to the table of every model using retina optimised image uploads.
 
-For example:
+**For example:**
 ```ruby
 class AddRetinaDimensionsColumnToUsers < ActiveRecord::Migration
   def self.change
@@ -21,12 +21,12 @@ end
 
 Instead of rendering images with the `image_tag` method we now render with `retina_image_tag`.
 
-Old way:
+**Old way:**
 ```ruby
 image_tag(@user.image.url(:small), :retina => true)
 ```
 
-New way:
+**New way:**
 ```ruby
 retina_image_tag(@user, :image, :small, :default => { :width => 50, :height => 40 })
 ```
