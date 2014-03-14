@@ -37,12 +37,8 @@ Add a text column named `retina_dimensions`. This column is used to store origin
 
 ```ruby
 class AddRetinaDimensionsColumnsToUsers < ActiveRecord::Migration
-  def self.up
+  def self.change
     add_column :users, :retina_dimensions, :text
-  end
-
-  def self.down
-    remove_column :users, :retina_dimensions, :text
   end
 end
 ```
