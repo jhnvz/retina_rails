@@ -1,5 +1,5 @@
-require 'retina_rails/extensions/paperclip'
-require 'retina_rails/extensions/carrierwave'
+require 'retina_rails/extensions/carrierwave' if defined?(::CarrierWave)
+require 'retina_rails/extensions/paperclip' if defined?(::Paperclip)
 
 module RetinaRails
   module Extensions

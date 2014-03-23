@@ -1,5 +1,5 @@
-require 'retina_rails/strategies/carrierwave'
-require 'retina_rails/strategies/paperclip'
+require 'retina_rails/strategies/carrierwave' if defined?(::CarrierWave)
+require 'retina_rails/strategies/paperclip' if defined?(::Paperclip)
 
 module RetinaRails
   module Strategies
