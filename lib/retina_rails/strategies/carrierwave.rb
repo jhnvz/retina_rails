@@ -114,8 +114,6 @@ module RetinaRails
         #
         def store_retina_dimensions
           if model
-            model.class.serialize :retina_dimensions ## Serialize dimensions on model
-
             width, height = `identify -format "%wx%h" #{file.path}`.split(/x/) ## Read dimensions
 
             ## Set original height and width attributes on model

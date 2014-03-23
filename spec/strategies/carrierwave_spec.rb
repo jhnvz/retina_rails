@@ -44,7 +44,7 @@ describe RetinaRails::Strategies::CarrierWave do
     end
 
     it 'should store original width and height attributes for version' do
-      @uploader.model.retina_dimensions.value[:avatar][:small].should == { :width => 30, :height => 40 }
+      @uploader.model.retina_dimensions[:avatar][:small].should == { :width => 30, :height => 40 }
     end
 
     it "should set quality to it's default 40%" do
@@ -103,7 +103,7 @@ describe RetinaRails::Strategies::CarrierWave do
     end
 
     it 'should store original width and height attributes for version' do
-      @uploader.model.retina_dimensions.value[:avatar][:small].should == { :width => 30, :height => 40 }
+      @uploader.model.retina_dimensions[:avatar][:small].should == { :width => 30, :height => 40 }
     end
 
   end
@@ -135,7 +135,7 @@ describe RetinaRails::Strategies::CarrierWave do
     end
 
     it 'should store original width and height attributes for version' do
-      @uploader.model.retina_dimensions.value[:avatar][:small].should == { :width => 100, :height => 100 }
+      @uploader.model.retina_dimensions[:avatar][:small].should == { :width => 100, :height => 100 }
     end
 
   end
