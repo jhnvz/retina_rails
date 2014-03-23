@@ -1,5 +1,6 @@
 require 'retina_rails/version'
 require 'retina_rails/extensions'
+require 'retina_rails/processors'
 require 'retina_rails/strategies'
 require 'retina_rails/helpers'
 
