@@ -6,10 +6,10 @@ module RetinaRails
 
     def self.include_strategies
       if defined?(::CarrierWave)
-        ::CarrierWave::Uploader::Base.include CarrierWave::Base
+        ::CarrierWave::Uploader::Base.send(:include, CarrierWave::Base)
       end
       if defined?(::Paperclip)
-        ::ActiveRecord::Base.include Paperclip::Base
+        ::ActiveRecord::Base.send(:include, Paperclip::Base)
       end
     end
 

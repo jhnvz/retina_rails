@@ -6,10 +6,10 @@ module RetinaRails
 
     def self.include_extensions
       if defined?(::CarrierWave)
-        ::CarrierWave::Mount.include CarrierWave::Mount
+        ::CarrierWave::Mount.send(:include, CarrierWave::Mount)
       end
       if defined?(::Paperclip)
-        ::Paperclip::Style.include Paperclip::Style
+        ::Paperclip::Style.send(:include, Paperclip::Style)
       end
     end
 
