@@ -4,6 +4,14 @@
 
 Makes your life easier optimizing an application for retina displays.
 
+### Still using version 1?
+
+---
+
+Check [Upgrading](jhnvz/retina_rails/blob/master/UPGRADING.md) to upgrade or the [readme](https://github.com/jhnvz/retina_rails/blob/1.0.4/README.md) of version 1.
+
+---
+
 How it works
 ------------
 
