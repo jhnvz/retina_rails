@@ -1,15 +1,14 @@
-require 'retina_rails/extensions/carrierwave' if defined?(::CarrierWave)
-require 'retina_rails/extensions/paperclip' if defined?(::Paperclip)
-
 module RetinaRails
   module Extensions
 
     def self.include_extensions
       if defined?(::CarrierWave)
-        ::CarrierWave::Mount.send(:include, CarrierWave::Mount)
+        require 'retina_rails/extensions/carrierwave'
+        ::CarrierWave::Mount.send(:include, RetinaRails::Extensions::CarrierWave::Mount)
       end
       if defined?(::Paperclip)
-        ::Paperclip::Style.send(:include, Paperclip::Style)
+        require 'retina_rails/extensions/paperclip'
+        ::Paperclip::Style.send(:include, RetinaRails::Extensions::Paperclip::Style)
       end
     end
 
