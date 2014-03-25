@@ -32,6 +32,19 @@ module ActionView
         image_tag(model.send(mounted_to).url(version), options)
       end
 
+      ##
+      # Show deprecation warning when old image_tag helper with retina option is used.
+      # TODO: Remove in new release
+      #
+      def image_tag_with_retina(source, options={})
+        if options.delete(:retina)
+          ActiveSupport::Deprecation.warn("`image_tag('image.png', :retina => true)` is deprecated use `retina_image_tag` instead")
+        end
+
+        image_tag_without_retina(source, options)
+      end
+      alias_method_chain :image_tag, :retina
+
     end # AssetTagHelper
   end # Helpers
 end # ActionView

@@ -33,7 +33,7 @@ describe ActionView::Helpers::AssetTagHelper, :type => :helper do
 
   subject { helper }
 
-  describe :retina_image_tag do
+  describe '#retina_image_tag' do
 
     context 'with dimensions present' do
 
@@ -74,6 +74,24 @@ describe ActionView::Helpers::AssetTagHelper, :type => :helper do
         image.should_not include('default')
       end
 
+    end
+
+  end
+
+  describe '#image_tag' do
+
+    it 'should show a deprecation warning when used with retina option' do
+      ActiveSupport::Deprecation.should_receive(:warn)
+        .with("`image_tag('image.png', :retina => true)` is deprecated use `retina_image_tag` instead")
+
+      image_tag('image.png', :retina => true)
+    end
+
+    it 'should not show a deprecation warning when used without retina option' do
+      ActiveSupport::Deprecation.should_not_receive(:warn)
+        .with("`image_tag('image.png', :retina => true)` is deprecated use `retina_image_tag` instead")
+
+      image_tag('image.png')
     end
 
   end
