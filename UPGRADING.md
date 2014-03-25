@@ -4,6 +4,10 @@ In version 2.0.0 we got rid of double image uploads and and the javascript helpe
 
 Since the whole strategy for displaying images has changed there are some things you need to do for version 2.0.0 to work.
 
+## Javascript helper
+
+Remove `//= require retina` from your Javascript manifest file (usually found at app/assets/javascripts/application.js) since we don't need it anymore.
+
 ## Migrations
 
 You'll need to add a `retina_dimensions` column to the table of every model using retina optimised image uploads.
