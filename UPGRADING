@@ -1,0 +1,7 @@
+##################################################
+#  NOTE FOR UPGRADING FROM PRE-2.0 VERSION       #
+##################################################
+
+Retina Rails 2.0 introduces non-backward compatible changes.
+Check https://github.com/jhnvz/retina_rails/blob/master/UPGRADING.md
+for more details.

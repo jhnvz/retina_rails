@@ -33,4 +33,8 @@ Gem::Specification.new do |gem|
   else
     gem.add_dependency 'rails', '>= 3.2.0'
   end
+
+  if File.exists?('UPGRADING')
+    gem.post_install_message = File.read("UPGRADING")
+  end
 end
