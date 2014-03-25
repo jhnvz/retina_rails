@@ -8,7 +8,7 @@ Makes your life easier optimizing an application for retina displays.
 
 ---
 
-Check [upgrading](https://github.com/jhnvz/retina_rails/blob/master/UPGRADING.md) to upgrade or the [readme](https://github.com/jhnvz/retina_rails/blob/1.0.4/README.md) of version 1.0.x.
+Check [upgrading](https://github.com/jhnvz/retina_rails/blob/master/UPGRADING.md) to upgrade or the [readme](https://github.com/jhnvz/retina_rails/tree/1.0.4) of version 1.0.x.
 
 ---
 
