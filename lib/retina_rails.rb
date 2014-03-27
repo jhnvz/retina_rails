@@ -9,10 +9,10 @@ module RetinaRails
   if defined?(Rails)
     class Railtie < Rails::Railtie
       initializer "retina_rails.include_strategies" do
-         RetinaRails::Strategies.include_strategies
+        RetinaRails::Strategies.include_strategies
       end
       initializer "retina_rails.include_extenions" do
-         RetinaRails::Extensions.include_extensions
+        RetinaRails::Extensions.include_extensions
       end
     end
   end
