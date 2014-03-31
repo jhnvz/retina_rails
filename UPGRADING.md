@@ -14,7 +14,7 @@ You'll need to add a `retina_dimensions` column to the table of every model usin
 
 **For example:**
 ```ruby
-class AddRetinaDimensionsColumnToUsers < ActiveRecord::Migration
+class AddRetinaDimensionsToUsers < ActiveRecord::Migration
   def self.change
     add_column :users, :retina_dimensions, :text
   end
@@ -32,6 +32,8 @@ image_tag(@user.image.url(:small), :retina => true)
 
 **New way:**
 ```ruby
+retina_image_tag(@user, :image, :small, :default => [50, 40)
+# or
 retina_image_tag(@user, :image, :small, :default => { :width => 50, :height => 40 })
 ```
 
