@@ -9,8 +9,8 @@ Gem::Specification.new do |gem|
   gem.authors       = ['Johan van Zonneveld', 'Arjen Oosterkamp']
   gem.email         = ['johan@vzonneveld.nl', 'mail@arjen.me']
   gem.homepage      = 'https://github.com/jhnvz/retina_rails.git'
-  gem.summary       = %q{Makes your life easier optimizing for retina displays}
-  gem.description   = %q{Retina Rails automatically generates retina versions of your uploaded images (CarrierWave or Paperclip). It detects if a visitor has a retina display and if so it displays the @2x version}
+  gem.summary       = %q{Makes your life easier optimizing your application for retina displays}
+  gem.description   = %q{Retina Rails makes your application use high-resolution images by default. It automatically optimizes uploaded images (CarrierWave or Paperclip) for retina displays by making them twice the size and reducing the quality.}
   gem.license       = 'MIT'
 
   gem.files         = `git ls-files`.split($/)
@@ -28,10 +28,10 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'sqlite3'
   gem.add_development_dependency 'coveralls'
 
-  if RUBY_VERSION < '1.9.3'
-    gem.add_dependency 'rails', '>= 3.2.0', '< 4.0.0'
-  else
+  if RUBY_VERSION > '1.9.2'
     gem.add_dependency 'rails', '>= 3.2.0'
+  else
+    gem.add_dependency 'rails', '>= 3.2.0', '< 4.0.0'
   end
 
   if File.exists?('UPGRADING')
