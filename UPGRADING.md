@@ -43,9 +43,9 @@ Since we only store the retina optimised version we need to save the original di
 
 Open up a console and run:
 ```ruby
-  Model.find_each do |model|
-    model.image.recreate_versions!
-  end
+Model.find_each do |model|
+  model.image.recreate_versions!
+end
 ```
 Or create a rake task that will do the trick for you.
 
