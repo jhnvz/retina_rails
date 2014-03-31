@@ -45,9 +45,9 @@ describe RetinaRails::Strategies::Paperclip do
       @upload.retina_dimensions[:avatar][:big].should == { :width => 30, :height => 40 }
     end
 
-    it "should set quality to it's default 40%" do
+    it "should set quality to it's default 60%" do
       quality = Magick::Image.read(image_path).first.quality
-      quality.should == 40
+      quality.should == 60
     end
 
   end
@@ -82,9 +82,9 @@ describe RetinaRails::Strategies::Paperclip do
       @upload.retina_dimensions[:avatar][:big].should == { :width => 30, :height => 40 }
     end
 
-    it "should set quality to it's default 40%" do
+    it "should set quality to it's default 60%" do
       quality = Magick::Image.read(image_path).first.quality
-      quality.should == 40
+      quality.should == 60
     end
 
   end
@@ -103,7 +103,7 @@ describe RetinaRails::Strategies::Paperclip do
       upload!
     end
 
-    it "should set quality to it's default 40%" do
+    it "should set quality" do
       quality = Magick::Image.read(image_path).first.quality
       quality.should == 25
     end

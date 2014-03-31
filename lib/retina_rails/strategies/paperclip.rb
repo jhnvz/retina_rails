@@ -70,7 +70,7 @@ module RetinaRails
             retina_options = if attachment[:retina].is_a?(Hash)
               attachment[:retina]
             else
-              { :quality => 40 }
+              { :quality => 60 }
             end
 
             ## Get retina quality

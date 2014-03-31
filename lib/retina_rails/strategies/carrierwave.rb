@@ -103,7 +103,7 @@ module RetinaRails
                 end
 
                 ## Set default quality if retina_quality is not defined
-                process :retina_quality => 40 if quality_processor.nil?
+                process :retina_quality => 60 if quality_processor.nil?
 
                 ## Store dimensions
                 process :store_retina_dimensions

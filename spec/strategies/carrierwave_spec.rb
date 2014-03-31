@@ -47,9 +47,9 @@ describe RetinaRails::Strategies::CarrierWave do
       @uploader.model.retina_dimensions[:avatar][:small].should == { :width => 30, :height => 40 }
     end
 
-    it "should set quality to it's default 40%" do
+    it "should set quality to it's default 60%" do
       quality = Magick::Image.read(@uploader.small.current_path).first.quality
-      quality.should == 40
+      quality.should == 60
     end
 
   end
@@ -63,15 +63,21 @@ describe RetinaRails::Strategies::CarrierWave do
       AnonymousUploader.class_eval do
         version :small do
           process :resize_to_fill => [30, 40]
-          process :retina_quality => 60
+          process :retina_quality => 80
         end
       end
-      upload!
     end
 
     it "should override quality" do
+      upload!
       quality = Magick::Image.read(@uploader.small.current_path).first.quality
-      quality.should == 60
+      quality.should == 80
+    end
+
+    it 'should receive quality processor once' do
+      AnonymousUploader.any_instance.should_receive(:retina_quality).once
+
+      upload!
     end
 
   end

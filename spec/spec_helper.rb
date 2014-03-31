@@ -35,8 +35,9 @@ require 'rspec/rails'
 
 require 'retina_rails'
 
-RetinaRails::Strategies.include_strategies
 RetinaRails::Extensions.include_extensions
+RetinaRails::Processors.include_processors
+RetinaRails::Strategies.include_strategies
 
 ## Load support files
 
