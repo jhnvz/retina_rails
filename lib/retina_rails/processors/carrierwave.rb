@@ -13,7 +13,7 @@ module RetinaRails
 
           ## Set original height and width attributes on model
 
-          model.retina_dimensions = (model.retina_dimensions.try(:value) || {}).deep_merge!(
+          model.retina_dimensions = (model.retina_dimensions || {}).deep_merge!(
             mounted_as => {
               version_name => {
                 :width  => width.to_i  / 2,
