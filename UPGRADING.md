@@ -14,7 +14,7 @@ You'll need to add a `retina_dimensions` column to the table of every model usin
 
 **For example:**
 ```ruby
-class AddRetinaDimensionsColumnToUsers < ActiveRecord::Migration
+class AddRetinaDimensionsToUsers < ActiveRecord::Migration
   def self.change
     add_column :users, :retina_dimensions, :text
   end
