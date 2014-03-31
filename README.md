@@ -61,7 +61,7 @@ class ExampleUploader < CarrierWave::Uploader::Base
 
   version :small do
     process :resize_to_fill => [30, 30]
-    process :retina_quality => 25
+    process :retina_quality => 80
   end
 
   version :large, :retina => false do
@@ -108,7 +108,7 @@ class ExampleUploader < ActiveRecord::Base
        :original => ["800x800", :jpg],
        :small => ["125x125#", :jpg]
      },
-     :retina => { :quality => 25 }
+     :retina => { :quality => 80 }
 
 end
 ```
