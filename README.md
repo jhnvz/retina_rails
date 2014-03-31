@@ -119,6 +119,8 @@ Displaying a retina image
 ------------
 
 ```ruby
+retina_image_tag(@user, :image, :small, :default => [50, 40)
+# or
 retina_image_tag(@user, :image, :small, :default => { :width => 50, :height => 40 })
 ```
 
