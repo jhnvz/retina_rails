@@ -25,7 +25,6 @@ Resources
 - [Installation](#installation)
 - [Migrations](#migrations)
 - [Carrierwave](#carrierwave)
- - [Custom resize processors](#custom-resize-processors)
 - [Paperclip](#paperclip)
 - [Displaying a retina image](#displaying-a-retina-image)
 - [Upgrading](https://github.com/jhnvz/retina_rails/blob/master/UPGRADING.md) 
