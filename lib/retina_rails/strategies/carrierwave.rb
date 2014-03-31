@@ -86,6 +86,9 @@ module RetinaRails
               dimensions.insert(0, height)
               dimensions.insert(0, width)
 
+              ## Reset the processors
+              versions[name][:uploader].processors = []
+
               ## Override version with double height and width
               version name, options do
                 process dimensions_processor[0] => dimensions
