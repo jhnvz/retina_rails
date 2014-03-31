@@ -60,6 +60,18 @@ describe ActionView::Helpers::AssetTagHelper, :type => :helper do
 
         image.should include('width="25"')
         image.should include('height="40"')
+
+        image = helper.retina_image_tag(Upload.new, :avatar, :small, :default => [25, 40])
+
+        image.should include('width="25"')
+        image.should include('height="40"')
+      end
+
+      it 'should set no height and width if no defaults present' do
+        image = helper.retina_image_tag(Upload.new, :avatar, :small)
+
+        image.should_not include('width')
+        image.should_not include('height')
       end
 
       it 'should be able to add a class' do
