@@ -73,7 +73,7 @@ class ExampleUploader < CarrierWave::Uploader::Base
 end
 ```
 
-By default it sets the retina image quality to 40 which can be overriden with `process :retina_quality => 25`. To disable the creation of a retina version simply call `version :small, :retina => false`.
+By default it sets the retina image quality to 60 which can be overriden with `process :retina_quality => 80`. To disable the creation of a retina version simply call `version :small, :retina => false`.
 
 ### Custom resize processors
 
@@ -115,7 +115,7 @@ class ExampleUploader < ActiveRecord::Base
 end
 ```
 
-By default it sets the retina image quality to 40 which can be overriden by adding a `quality` option. To disable the creation of a retina version set the `retina` option to false `:retina => false`.
+By default it sets the retina image quality to 60 which can be overriden by adding a `quality` option. To disable the creation of a retina version set the `retina` option to false `:retina => false`.
 
 Displaying a retina image
 ------------
