@@ -42,7 +42,7 @@ Migrations
 Add a text column named `retina_dimensions`. This column is used to store original dimensions of the images.
 
 ```ruby
-class AddRetinaDimensionsColumnToUsers < ActiveRecord::Migration
+class AddRetinaDimensionsToUsers < ActiveRecord::Migration
   def self.change
     add_column :users, :retina_dimensions, :text
   end
