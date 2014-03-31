@@ -14,7 +14,7 @@ module RetinaRails
             def mount_uploader(*args)
               original_mount_uploader(*args)
 
-              serialize :retina_dimensions if columns_hash.has_key?('retina_dimensions')
+              serialize :retina_dimensions if table_exists? && columns_hash.has_key?('retina_dimensions')
             end
           end
         end
