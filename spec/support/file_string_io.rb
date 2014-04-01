@@ -1,4 +1,5 @@
 class FileStringIO < StringIO
+
   attr_accessor :filepath
 
   def initialize(*args)
@@ -9,4 +10,5 @@ class FileStringIO < StringIO
   def original_filename
     File.basename(@filepath)
   end
+
 end

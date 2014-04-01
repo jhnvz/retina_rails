@@ -1,19 +1,23 @@
 require 'retina_rails/version'
+require 'retina_rails/extensions'
+require 'retina_rails/processors'
 require 'retina_rails/strategies'
 require 'retina_rails/helpers'
-require 'retina_rails/exception'
-
-require 'retina_rails/deprecation/carrierwave'
-require 'retina_rails/deprecation/paperclip'
 
 module RetinaRails
 
   if defined?(Rails)
-    class Engine < Rails::Engine; end
-
     class Railtie < Rails::Railtie
+      initializer "retina_rails.include_extenions" do
+        RetinaRails::Extensions.include_extensions
+      end
+
+      initializer "retina_rails.include_processors" do
+        RetinaRails::Processors.include_processors
+      end
+
       initializer "retina_rails.include_strategies" do
-         RetinaRails::Strategies.include_strategies
+        RetinaRails::Strategies.include_strategies
       end
     end
   end

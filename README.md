@@ -4,19 +4,49 @@
 
 Makes your life easier optimizing an application for retina displays.
 
+### Still using version 1.0.x?
+
+---
+
+Check [upgrading](https://github.com/jhnvz/retina_rails/blob/master/UPGRADING.md) to upgrade or the version 1.0.x [readme](https://github.com/jhnvz/retina_rails/tree/1.0.4).
+
+---
+
 How it works
 ------------
 
-Retina Rails automatically generates retina versions of your uploaded images (CarrierWave or Paperclip). It detects if a visitor has a retina display and if so it displays the @2x version.
+Retina Rails makes your application use high-resolution images by default. It automatically optimizes uploaded images (CarrierWave or Paperclip) for retina displays by making them twice the size and reducing the quality.
 
-Note: It also works for images that live in assets/images.
+*Good source on setting up image quality: http://www.netvlies.nl/blog/design-interactie/retina-revolution*
+
+Resources
+------------
+
+- [Installation](#installation)
+- [Migrations](#migrations)
+- [Carrierwave](#carrierwave)
+- [Paperclip](#paperclip)
+- [Displaying a retina image](#displaying-a-retina-image)
+- [Upgrading](https://github.com/jhnvz/retina_rails/blob/master/UPGRADING.md) 
 
 Installation
 ------------
 
-1. Add `gem 'retina_rails'` to your Gemfile.
+1. Add `gem 'retina_rails', '~> 2.0.0'` to your Gemfile.
 1. Run `bundle install`.
-1. Add `//= require retina` to your Javascript manifest file (usually found at `app/assets/javascripts/application.js`).
+
+Migrations
+------------
+
+Add a text column named `retina_dimensions`. This column is used to store original dimensions of the images.
+
+```ruby
+class AddRetinaDimensionsToUsers < ActiveRecord::Migration
+  def self.change
+    add_column :users, :retina_dimensions, :text
+  end
+end
+```
 
 CarrierWave
 ------------
@@ -30,7 +60,7 @@ class ExampleUploader < CarrierWave::Uploader::Base
 
   version :small do
     process :resize_to_fill => [30, 30]
-    process :retina_quality => 25
+    process :retina_quality => 80
   end
 
   version :large, :retina => false do
@@ -39,11 +69,12 @@ class ExampleUploader < CarrierWave::Uploader::Base
 
 end
 ```
-By default it sets the retina image quality to 40 which can be overriden with `process :retina_quality => 25`. To disable the creation of a retina version simply call `version :small, :retina => false`.
 
-### Custom processors
+By default it sets the retina image quality to 60 which can be overriden with `process :retina_quality => 80`. To disable the creation of a retina version simply call `version :small, :retina => false`.
 
-You can also use your custom processors like so:
+### Custom resize processors
+
+You can also use your custom resize processors like so:
 
 ```ruby
 class ExampleUploader < CarrierWave::Uploader::Base
@@ -51,23 +82,20 @@ class ExampleUploader < CarrierWave::Uploader::Base
   retina!
 
   version :small, :retina => false do
-    process :resize_to_fill_with_gravity => [100, 100, 'North', :jpg, 75]
-  end
-
-  version :small_retina, :retina => false do
-    process :resize_to_fill_with_gravity => [200, 200, 'North', :jpg, 40]
+    process :resize_to_fill_with_gravity => [200, 200, 'North', :jpg, 75]
+    process :store_retina_dimensions
   end
 
 end
 ```
 
-This will generate `small.jpg` and `small@2x.jpg`.
+Make sure you double the image size yourself in your processor. In this example the image will be displayed with a size of 100x100.
 
 
 Paperclip
 ------------
 
-Simply add `retina!` to your model and set `:retina` to true.
+Simply add `retina!` to your model.
 
 ```ruby
 class ExampleUploader < ActiveRecord::Base
@@ -77,38 +105,38 @@ class ExampleUploader < ActiveRecord::Base
   has_attached_file :image,
     :styles => {
        :original => ["800x800", :jpg],
-       :big => ["125x125#", :jpg]
+       :small => ["125x125#", :jpg]
      },
-     :retina => true # Or
-     :retina => { :quality => 25 } # Optional
+     :retina => { :quality => 80 }
 
 end
 ```
-By default it sets the retina image quality to 40 which can be overriden by adding a `quality` option.
 
-For retina images use
+By default it sets the retina image quality to 60 which can be overriden by adding a `quality` option. To disable the creation of a retina version set the `retina` option to false `:retina => false`.
+
+Displaying a retina image
 ------------
 
 ```ruby
-image_tag('image.png', :retina => true)
+retina_image_tag(@user, :image, :small, :default => [50, 40)
+# or
+retina_image_tag(@user, :image, :small, :default => { :width => 50, :height => 40 })
 ```
 
-Voila! Now you're using Retina Rails.
+If no image is uploaded (yet) it will display the default image defined with CarrierWave or Paperclip and set the width and height attributes specified in the default option.
+
+**Voila! Now you're using Retina Rails.**
 
 Supported Ruby Versions
 ------------
 
-This library aims to support and is tested against[travis] the following Ruby
+This library is tested against Travis and aims to support the following Ruby
 implementations:
 
 * Ruby 1.9.2
 * Ruby 1.9.3
 * Ruby 2.0.0
-
-Credits
-------------
-
-Retina Rails uses retinajs (https://github.com/imulus/retinajs)
+* Ruby 2.1.1
 
 Contributing
 ------------
@@ -122,4 +150,4 @@ Contributing
 Copyright
 ------------
 
-Copyright (c) 2012 Johan van Zonneveld. See LICENSE for details.
+Copyright (c) 2012-2014 Johan van Zonneveld. See LICENSE for details.

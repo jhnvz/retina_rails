@@ -1,207 +1,170 @@
-require 'stringio'
 require 'spec_helper'
-
-class AnonymousUploader < CarrierWave::Uploader::Base
-
-  include CarrierWave::RMagick
-
-  retina!
-
-  version :small do
-    process :resize_to_fill => [30, 30]
-    process :quality => 60
-    process :retina_quality => 20
-  end
-
-  version :small_without_quality do
-    process :resize_to_fill => [30, 30]
-  end
-
-  version :small_without_dimensions do
-    process :desaturate
-  end
-
-  version :small_multiple_processors do
-    process :resize_to_fill => [30, 30]
-    process :desaturate
-  end
-
-  version :small_without_retina, :retina => false do
-    process :quality => 60
-  end
-
-  version :small_custom_processor, :retina => false do
-    process :resize_to_fill_with_gravity => [100, 100, 'North', :jpg, 75]
-  end
-
-  version :small_custom_processor_retina, :retina => false do
-    process :resize_to_fill_with_gravity => [200, 200, 'North', :jpg, 40]
-  end
-
-  version :small_with_failing_conditional, :if => ->(img, opts) { false } do
-    process :resize_to_fill => [30, 30]
-  end
-
-  def desaturate
-    manipulate! do |img|
-      img = img.quantize 256, Magick::GRAYColorspace
-    end
-  end
-
-  def resize_to_fill_with_gravity(width, height, gravity, format, quality); end
-
-  def quality(percentage)
-    manipulate! do |img|
-      img.write(current_path) { self.quality = percentage } unless img.quality == percentage
-      img = yield(img) if block_given?
-      img
-    end
-  end
-
-  version :small_without_processor
-
-end
-
-class CarrierWaveUpload
-
-  extend CarrierWave::Mount
-
-  attr_accessor :avatar
-  attr_accessor :id
-
-  mount_uploader :avatar, AnonymousUploader
-
-  def initialize
-    self.id = 999
-  end
-
-end
 
 describe RetinaRails::Strategies::CarrierWave do
 
   include CarrierWave::Test::Matchers
 
-  subject { AnonymousUploader }
-
-  before do
+  ##
+  # Store image so we can run tests against it
+  #
+  def upload!
     AnonymousUploader.enable_processing = true
     @uploader = AnonymousUploader.new(CarrierWaveUpload.new, :avatar)
     @uploader.store!(File.open("#{fixture_path}/images/avatar.jpeg"))
   end
 
-  after do
+  ##
+  # Remove image after testing
+  #
+  after(:each) do
     AnonymousUploader.enable_processing = false
     @uploader.remove!
+    AnonymousUploader.versions[:small][:uploader].processors = [] ## Reset processors
   end
 
+  ##
+  # Actual tests
+  #
   context 'with dimensions processor' do
 
-    its(:versions) { should include :small_retina }
+    ##
+    # Setup Anonymous uploader with a resize processor
+    #
+    before(:each) do
+      AnonymousUploader.class_eval do
+        version :small do
+          process :resize_to_fill => [30, 40]
+        end
+      end
+      upload!
+    end
 
-    it { @uploader.small.should have_dimensions(30, 30) }
-    it { @uploader.small_retina.should have_dimensions(60, 60) }
+    it 'should double the height and width of an image' do
+      @uploader.small.should have_dimensions(60, 80)
+    end
 
-    it { File.basename(@uploader.small.current_path, 'jpeg').should include 'small_'}
+    it 'should store original width and height attributes for version' do
+      @uploader.model.retina_dimensions[:avatar][:small].should == { :width => 30, :height => 40 }
+    end
 
-    it { File.basename(@uploader.small_retina.current_path, 'jpeg').should include '@2x'}
-    it { File.basename(@uploader.small_retina.current_path, 'jpeg').should_not include 'retina_'}
-
-  end
-
-  context 'with quality processor' do
-
-    it { Magick::Image.read(@uploader.small.current_path).first.quality.should == 60 }
-
-    it { Magick::Image.read(@uploader.small_retina.current_path).first.quality.should == 20 }
-
-  end
-
-  context 'without quality processor' do
-
-    it { Magick::Image.read(@uploader.small_without_quality.current_path).first.quality.should == 84 }
-
-    it { Magick::Image.read(@uploader.small_without_quality_retina.current_path).first.quality.should == 40 }
-
-  end
-
-  context 'without dimensions processor' do
-
-    its(:versions) { should_not include :small_without_dimensions_retina }
+    it "should set quality to it's default 60%" do
+      quality = Magick::Image.read(@uploader.small.current_path).first.quality
+      quality.should == 60
+    end
 
   end
 
-  context 'with multiple processors' do
+  context 'override quality' do
 
-    its(:versions) { should include :small_multiple_processors_retina }
+    ##
+    # Setup Anonymous uploader with a resize processor and override quality
+    #
+    before(:each) do
+      AnonymousUploader.class_eval do
+        version :small do
+          process :resize_to_fill => [30, 40]
+          process :retina_quality => 80
+        end
+      end
+    end
 
-    it { subject.versions[:small_multiple_processors][:uploader].processors.should include([:desaturate, [], nil]) }
+    it "should override quality" do
+      upload!
+      quality = Magick::Image.read(@uploader.small.current_path).first.quality
+      quality.should == 80
+    end
 
-    it { @uploader.small_multiple_processors.should have_dimensions(30, 30) }
-    it { @uploader.small_multiple_processors_retina.should have_dimensions(60, 60) }
+    it 'should receive quality processor once' do
+      AnonymousUploader.any_instance.should_receive(:retina_quality).once
 
-    it { File.basename(@uploader.small_multiple_processors.current_path, 'jpeg').should include 'small_'}
-
-    it { File.basename(@uploader.small_multiple_processors_retina.current_path, 'jpeg').should include '@2x'}
-    it { File.basename(@uploader.small_multiple_processors_retina.current_path, 'jpeg').should_not include 'retina_'}
+      upload!
+    end
 
   end
 
-  context 'without processor' do
+  context 'multiple processors' do
 
-    its(:versions) { should include :small_without_processor }
-    its(:versions) { should_not include :small_without_processor_retina }
+    ##
+    # Setup Anonymous uploader with a custom processor
+    #
+    before(:each) do
+      AnonymousUploader.class_eval do
+        version :small do
+          process :resize_to_fill => [30, 40]
+          process :desaturate
+        end
+
+        def desaturate
+          manipulate! do |img|
+            img = img.quantize 256, Magick::GRAYColorspace
+          end
+        end
+      end
+
+      upload!
+    end
+
+    it 'should double the height and width of an image' do
+      @uploader.small.should have_dimensions(60, 80)
+    end
+
+    it 'should store original width and height attributes for version' do
+      @uploader.model.retina_dimensions[:avatar][:small].should == { :width => 30, :height => 40 }
+    end
+
+  end
+
+  context 'with custom resize processor' do
+
+    ##
+    # Setup Anonymous uploader with a custom resize processor
+    #
+    before(:each) do
+      AnonymousUploader.class_eval do
+        version :small, :retina => false do
+          process :custom_resize => [200, 200]
+          process :store_retina_dimensions
+        end
+
+        def custom_resize(width, height)
+          manipulate! do |img|
+            img.resize_to_fill!(width, height)
+          end
+        end
+      end
+
+      upload!
+    end
+
+    it 'should double the height and width of an image' do
+      @uploader.small.should have_dimensions(200, 200)
+    end
+
+    it 'should store original width and height attributes for version' do
+      @uploader.model.retina_dimensions[:avatar][:small].should == { :width => 100, :height => 100 }
+    end
 
   end
 
   context 'with failing conditional version' do
 
-    it { @uploader.version_exists?(:small_with_failing_conditional).should == false }
-    it { @uploader.small_with_failing_conditional.current_path.should_not be_present }
+    ##
+    # Setup Anonymous uploader with a failing condition
+    #
+    before(:each) do
+      AnonymousUploader.class_eval do
+        version :small_conditional, :if => ->(img, opts) { false } do
+          process :resize_to_fill => [30, 30]
+        end
+      end
 
-  end
-
-  context 'file with multiple dots' do
-
-    before do
-      AnonymousUploader.enable_processing = true
-      @uploader = AnonymousUploader.new(CarrierWaveUpload.new, :avatar)
-      @uploader.store!(File.open("#{fixture_path}/images/avatar.with.dots.jpeg"))
+      upload!
     end
 
-    it { File.basename(@uploader.small.current_path, 'jpeg').should == 'small_avatar.with.dots.' }
-    it { File.basename(@uploader.small_retina.current_path, 'jpeg').should == 'small_avatar.with.dots@2x.' }
-
-  end
-
-  context 'without retina' do
-
-    its(:versions) { should_not include :small_without_retina_retina }
-
-  end
-
-  context 'custom processor' do
-
-    its(:versions) { should_not include :small_custom_processor_retina_retina }
-
-    it { File.basename(@uploader.small_custom_processor.current_path, 'jpeg').should include 'small_custom_processor_'}
-
-    it { File.basename(@uploader.small_custom_processor_retina.current_path, 'jpeg').should include '@2x'}
-    it { File.basename(@uploader.small_custom_processor_retina.current_path, 'jpeg').should_not include 'retina_'}
-
-  end
-
-  context 'file without extension name' do
-
-    before do
-      AnonymousUploader.enable_processing = true
-      @uploader = AnonymousUploader.new(CarrierWaveUpload.new, :avatar)
-      stream = FileStringIO.new('avatar', File.read("#{fixture_path}/images/avatar.jpeg"))
-      @uploader.store!(stream)
+    it 'should not create a version' do
+      @uploader.version_exists?(:small_conditional).should be_false
+      @uploader.small_conditional.current_path.should_not be_present
     end
-
-    it { File.basename(@uploader.small.current_path, 'jpeg').should include 'small_'}
-    it { File.basename(@uploader.small_retina.current_path, 'jpeg').should include '@2x'}
-    it { File.basename(@uploader.small_retina.current_path, 'jpeg').should_not include 'retina_'}
 
   end
 
