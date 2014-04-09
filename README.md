@@ -1,6 +1,16 @@
 ## Retina Rails
 
-[![Gem Version](https://badge.fury.io/rb/retina_rails.png)](http://badge.fury.io/rb/retina_rails) [![Build Status](https://secure.travis-ci.org/jhnvz/retina_rails.png?branch=master)](http://travis-ci.org/jhnvz/retina_rails) [![Coverage Status](https://coveralls.io/repos/jhnvz/retina_rails/badge.png?branch=master)](https://coveralls.io/r/jhnvz/retina_rails) [![Code Climate](https://codeclimate.com/github/jhnvz/retina_rails.png)](https://codeclimate.com/github/jhnvz/retina_rails) [![Dependency Status](https://gemnasium.com/jhnvz/retina_rails.png)](https://gemnasium.com/jhnvz/retina_rails)
+[![Gem Version](http://img.shields.io/gem/v/retina_rails.svg)][gem]
+[![Build Status](http://img.shields.io/travis/jhnvz/retina_rails.svg)][travis]
+[![Coverage Status](http://img.shields.io/coveralls/jhnvz/retina_rails.svg)][coveralls]
+[![Code Climate](http://img.shields.io/codeclimate/github/jhnvz/retina_rails.svg)][codeclimate]
+[![Dependency Status](http://img.shields.io/gemnasium/jhnvz/retina_rails.svg)][gemnasium]
+
+[gem]: https://rubygems.org/gems/retina_rails
+[travis]: http://travis-ci.org/jhnvz/retina_rails
+[coveralls]: https://coveralls.io/r/jhnvz/retina_rails
+[codeclimate]: https://codeclimate.com/github/jhnvz/retina_rails
+[gemnasium]: https://gemnasium.com/jhnvz/retina_rails
 
 Makes your life easier optimizing an application for retina displays.
 
