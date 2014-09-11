@@ -1,10 +1,10 @@
 ## Retina Rails
 
-[![Gem Version](http://img.shields.io/gem/v/retina_rails.svg)][gem]
-[![Build Status](http://img.shields.io/travis/jhnvz/retina_rails.svg)][travis]
-[![Coverage Status](http://img.shields.io/coveralls/jhnvz/retina_rails.svg)][coveralls]
-[![Code Climate](http://img.shields.io/codeclimate/github/jhnvz/retina_rails.svg)][codeclimate]
-[![Dependency Status](http://img.shields.io/gemnasium/jhnvz/retina_rails.svg)][gemnasium]
+[![Gem Version](http://img.shields.io/gem/v/retina_rails.svg?style=flat)][gem]
+[![Build Status](http://img.shields.io/travis/jhnvz/retina_rails.svg?style=flat)][travis]
+[![Coverage Status](http://img.shields.io/coveralls/jhnvz/retina_rails.svg?style=flat)][coveralls]
+[![Code Climate](http://img.shields.io/codeclimate/github/jhnvz/retina_rails.svg?style=flat)][codeclimate]
+[![Dependency Status](http://img.shields.io/gemnasium/jhnvz/retina_rails.svg?style=flat)][gemnasium]
 
 [gem]: https://rubygems.org/gems/retina_rails
 [travis]: http://travis-ci.org/jhnvz/retina_rails
