@@ -37,7 +37,7 @@ Resources
 - [Carrierwave](#carrierwave)
 - [Paperclip](#paperclip)
 - [Displaying a retina image](#displaying-a-retina-image)
-- [Upgrading](https://github.com/jhnvz/retina_rails/blob/master/UPGRADING.md) 
+- [Upgrading](https://github.com/jhnvz/retina_rails/blob/master/UPGRADING.md)
 
 Installation
 ------------
@@ -147,6 +147,7 @@ implementations:
 * Ruby 1.9.3
 * Ruby 2.0.0
 * Ruby 2.1.1
+* Ruby 2.1.3
 
 Contributing
 ------------
