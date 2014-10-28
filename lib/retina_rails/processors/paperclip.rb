@@ -10,7 +10,7 @@ module Paperclip
       style     = options[:style]
 
       if file_path
-        width, height = `identify -format "%wx%h" #{file_path}`.split(/x/) ## Read dimensions
+        width, height = `identify -format "%wx%h" '#{file_path}'`.split(/x/) ## Read dimensions
 
         ## Set original height and width attributes on model
         model.retina_dimensions = (model.retina_dimensions || {}).deep_merge!(
