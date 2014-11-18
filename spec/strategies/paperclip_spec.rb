@@ -89,6 +89,34 @@ describe RetinaRails::Strategies::Paperclip do
 
   end
 
+  context 'with complex geometry' do
+
+    before(:each) do
+      PaperclipUpload.class_eval do
+        has_attached_file :avatar,
+          :styles => {
+             :big      => "x800",
+             :original => "800x800"
+           }
+      end
+      upload!
+    end
+
+    it 'should double the height and width of an image' do
+      Paperclip::Geometry.from_file(image_path).to_s.should == '1600x1600'
+    end
+
+    it 'should store original width and height attributes for version' do
+      @upload.retina_dimensions[:avatar][:big].should == { :width => 800, :height => 800 }
+    end
+
+    it "should set quality to it's default 60%" do
+      quality = Magick::Image.read(image_path).first.quality
+      quality.should == 60
+    end
+
+  end
+
   context 'override quality' do
 
     before(:each) do
