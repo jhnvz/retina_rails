@@ -86,6 +86,12 @@ describe ActionView::Helpers::AssetTagHelper, :type => :helper do
         image.should_not include('default')
       end
 
+      it 'should respect other options' do
+        image = helper.retina_image_tag(Upload.new, :avatar, :small, :default => { :width => 25, :height => 40 }, :alt => 'Some alt tag')
+
+        image.should include('alt="Some alt tag"')
+      end
+
     end
 
   end
