@@ -27,11 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rmagick'
   gem.add_development_dependency 'sqlite3'
 
-  if RUBY_VERSION > '1.9.2'
-    gem.add_dependency 'rails', '>= 3.2.0'
-  else
-    gem.add_dependency 'rails', '>= 3.2.0', '< 4.0.0'
-  end
+  gem.add_dependency 'rails', '>= 3.2.0'
 
   if File.exists?('UPGRADING')
     gem.post_install_message = File.read("UPGRADING")
