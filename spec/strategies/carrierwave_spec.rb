@@ -19,7 +19,14 @@ describe RetinaRails::Strategies::CarrierWave do
   after(:each) do
     AnonymousUploader.enable_processing = false
     @uploader.remove!
-    AnonymousUploader.versions[:small][:uploader].processors = [] ## Reset processors
+
+    ## Reset processors
+    version = AnonymousUploader.versions[:small]
+    if version.respond_to?(:processors)
+      version.processors = []
+    else
+      version[:uploader].processors = []
+    end
   end
 
   ##

@@ -65,7 +65,11 @@ module RetinaRails
             config = versions[name]
             options[:retina] = false
 
-            processors = config[:uploader].processors.dup
+            processors = if config.respond_to?(:processors)
+                           config.processors.dup
+                         else
+                           config[:uploader].processors.dup
+                         end
             dimensions_processor = nil
 
             ## Check if there's a resize processor to get the dimensions
@@ -86,7 +90,11 @@ module RetinaRails
               dimensions.insert(0, width)
 
               ## Reset the processors
-              versions[name][:uploader].processors = []
+              if config.respond_to?(:processors)
+                config.processors = []
+              else
+                config[:uploader].processors = []
+              end
 
               ## Override version with double height and width
               version name, options do
