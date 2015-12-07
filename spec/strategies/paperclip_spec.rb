@@ -38,16 +38,16 @@ describe RetinaRails::Strategies::Paperclip do
     end
 
     it 'should double the height and width of an image' do
-      Paperclip::Geometry.from_file(image_path).to_s.should == '60x80'
+      expect(Paperclip::Geometry.from_file(image_path).to_s).to eq('60x80')
     end
 
     it 'should store original width and height attributes for version' do
-      @upload.retina_dimensions[:avatar][:big].should == { :width => 30, :height => 40 }
+      expect(@upload.retina_dimensions[:avatar][:big]).to eq({ :width => 30, :height => 40 })
     end
 
     it "should set quality to it's default 60%" do
       quality = Magick::Image.read(image_path).first.quality
-      quality.should == 60
+      expect(quality).to eq(60)
     end
 
   end
@@ -75,16 +75,16 @@ describe RetinaRails::Strategies::Paperclip do
     end
 
     it 'should double the height and width of an image' do
-      Paperclip::Geometry.from_file(image_path).to_s.should == '60x80'
+      expect(Paperclip::Geometry.from_file(image_path).to_s).to eq('60x80')
     end
 
     it 'should store original width and height attributes for version' do
-      @upload.retina_dimensions[:avatar][:big].should == { :width => 30, :height => 40 }
+      expect(@upload.retina_dimensions[:avatar][:big]).to eq({ :width => 30, :height => 40 })
     end
 
     it "should set quality to it's default 60%" do
       quality = Magick::Image.read(image_path).first.quality
-      quality.should == 60
+      expect(quality).to eq(60)
     end
 
   end
@@ -103,16 +103,16 @@ describe RetinaRails::Strategies::Paperclip do
     end
 
     it 'should double the height and width of an image' do
-      Paperclip::Geometry.from_file(image_path).to_s.should == '1600x1600'
+      expect(Paperclip::Geometry.from_file(image_path).to_s).to eq('1600x1600')
     end
 
     it 'should store original width and height attributes for version' do
-      @upload.retina_dimensions[:avatar][:big].should == { :width => 800, :height => 800 }
+      expect(@upload.retina_dimensions[:avatar][:big]).to eq({ :width => 800, :height => 800 })
     end
 
     it "should set quality to it's default 60%" do
       quality = Magick::Image.read(image_path).first.quality
-      quality.should == 60
+      expect(quality).to eq(60)
     end
 
   end
@@ -133,7 +133,7 @@ describe RetinaRails::Strategies::Paperclip do
 
     it "should set quality" do
       quality = Magick::Image.read(image_path).first.quality
-      quality.should == 25
+      expect(quality).to eq(25)
     end
 
   end

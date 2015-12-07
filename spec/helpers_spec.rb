@@ -40,56 +40,58 @@ describe ActionView::Helpers::AssetTagHelper, :type => :helper do
       it 'should set correct width and height' do
         image = helper.retina_image_tag(Upload.new, :avatar, :small)
 
-        image.should include('width="40"')
-        image.should include('height="30"')
+        expect(image).to include('width="40"')
+        expect(image).to include('height="30"')
       end
 
       it 'should be able to add a class' do
         image = helper.retina_image_tag(Upload.new, :avatar, :small, :class => 'foo')
-        image.should include('class="foo"')
+        expect(image).to include('class="foo"')
       end
 
     end
 
     context 'without dimensions present' do
 
-      before(:each) { Upload.any_instance.stub(:retina_dimensions).and_return(nil) }
+      before(:each) do
+        allow_any_instance_of(Upload).to receive(:retina_dimensions).and_return(nil)
+      end
 
       it 'should set correct width and height' do
         image = helper.retina_image_tag(Upload.new, :avatar, :small, :default => { :width => 25, :height => 40 })
 
-        image.should include('width="25"')
-        image.should include('height="40"')
+        expect(image).to include('width="25"')
+        expect(image).to include('height="40"')
 
         image = helper.retina_image_tag(Upload.new, :avatar, :small, :default => [25, 40])
 
-        image.should include('width="25"')
-        image.should include('height="40"')
+        expect(image).to include('width="25"')
+        expect(image).to include('height="40"')
       end
 
       it 'should set no height and width if no defaults present' do
         image = helper.retina_image_tag(Upload.new, :avatar, :small)
 
-        image.should_not include('width')
-        image.should_not include('height')
+        expect(image).to_not include('width')
+        expect(image).to_not include('height')
       end
 
       it 'should be able to add a class' do
         image = helper.retina_image_tag(Upload.new, :avatar, :small, :default => { :width => 25, :height => 40 }, :class => 'foo')
 
-        image.should include('class="foo"')
+        expect(image).to include('class="foo"')
       end
 
       it 'should strip default attributes' do
         image = helper.retina_image_tag(Upload.new, :avatar, :small, :default => { :width => 25, :height => 40 })
 
-        image.should_not include('default')
+        expect(image).to_not include('default')
       end
 
       it 'should respect other options' do
         image = helper.retina_image_tag(Upload.new, :avatar, :small, :default => { :width => 25, :height => 40 }, :alt => 'Some alt tag')
 
-        image.should include('alt="Some alt tag"')
+        expect(image).to include('alt="Some alt tag"')
       end
 
     end
@@ -99,14 +101,14 @@ describe ActionView::Helpers::AssetTagHelper, :type => :helper do
   describe '#image_tag' do
 
     it 'should show a deprecation warning when used with retina option' do
-      ActiveSupport::Deprecation.should_receive(:warn)
+      expect(ActiveSupport::Deprecation).to receive(:warn)
         .with("`image_tag('image.png', :retina => true)` is deprecated use `retina_image_tag` instead")
 
       image_tag('image.png', :retina => true)
     end
 
     it 'should not show a deprecation warning when used without retina option' do
-      ActiveSupport::Deprecation.should_not_receive(:warn)
+      expect(ActiveSupport::Deprecation).to_not receive(:warn)
         .with("`image_tag('image.png', :retina => true)` is deprecated use `retina_image_tag` instead")
 
       image_tag('image.png')
