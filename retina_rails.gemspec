@@ -19,20 +19,15 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
 
   gem.add_development_dependency 'bundler', '>= 1.0.0'
-  gem.add_development_dependency 'rake'
-  gem.add_development_dependency 'rspec', '>= 2.3'
-  gem.add_development_dependency 'rspec-rails', '~> 2.0'
+  gem.add_development_dependency 'coveralls'
   gem.add_development_dependency 'carrierwave'
   gem.add_development_dependency 'paperclip'
+  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rspec-rails', '~> 3.4'
   gem.add_development_dependency 'rmagick'
   gem.add_development_dependency 'sqlite3'
-  gem.add_development_dependency 'coveralls'
 
-  if RUBY_VERSION > '1.9.2'
-    gem.add_dependency 'rails', '>= 3.2.0'
-  else
-    gem.add_dependency 'rails', '>= 3.2.0', '< 4.0.0'
-  end
+  gem.add_dependency 'rails', '>= 3.2.0'
 
   if File.exists?('UPGRADING')
     gem.post_install_message = File.read("UPGRADING")

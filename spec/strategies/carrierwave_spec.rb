@@ -19,7 +19,14 @@ describe RetinaRails::Strategies::CarrierWave do
   after(:each) do
     AnonymousUploader.enable_processing = false
     @uploader.remove!
-    AnonymousUploader.versions[:small][:uploader].processors = [] ## Reset processors
+
+    ## Reset processors
+    version = AnonymousUploader.versions[:small]
+    if version.respond_to?(:processors)
+      version.processors = []
+    else
+      version[:uploader].processors = []
+    end
   end
 
   ##
@@ -40,16 +47,16 @@ describe RetinaRails::Strategies::CarrierWave do
     end
 
     it 'should double the height and width of an image' do
-      @uploader.small.should have_dimensions(60, 80)
+      expect(@uploader.small).to have_dimensions(60, 80)
     end
 
     it 'should store original width and height attributes for version' do
-      @uploader.model.retina_dimensions[:avatar][:small].should == { :width => 30, :height => 40 }
+      expect(@uploader.model.retina_dimensions[:avatar][:small]).to eq({ :width => 30, :height => 40 })
     end
 
     it "should set quality to it's default 60%" do
       quality = Magick::Image.read(@uploader.small.current_path).first.quality
-      quality.should == 60
+      expect(quality).to eq(60)
     end
 
   end
@@ -71,11 +78,11 @@ describe RetinaRails::Strategies::CarrierWave do
     it "should override quality" do
       upload!
       quality = Magick::Image.read(@uploader.small.current_path).first.quality
-      quality.should == 80
+      expect(quality).to eq 80
     end
 
     it 'should receive quality processor once' do
-      AnonymousUploader.any_instance.should_receive(:retina_quality).once
+      expect_any_instance_of(AnonymousUploader).to receive(:retina_quality).once
 
       upload!
     end
@@ -105,11 +112,11 @@ describe RetinaRails::Strategies::CarrierWave do
     end
 
     it 'should double the height and width of an image' do
-      @uploader.small.should have_dimensions(60, 80)
+      expect(@uploader.small).to have_dimensions(60, 80)
     end
 
     it 'should store original width and height attributes for version' do
-      @uploader.model.retina_dimensions[:avatar][:small].should == { :width => 30, :height => 40 }
+      expect(@uploader.model.retina_dimensions[:avatar][:small]).to eq({ :width => 30, :height => 40 })
     end
 
   end
@@ -137,11 +144,11 @@ describe RetinaRails::Strategies::CarrierWave do
     end
 
     it 'should double the height and width of an image' do
-      @uploader.small.should have_dimensions(200, 200)
+      expect(@uploader.small).to have_dimensions(200, 200)
     end
 
     it 'should store original width and height attributes for version' do
-      @uploader.model.retina_dimensions[:avatar][:small].should == { :width => 100, :height => 100 }
+      expect(@uploader.model.retina_dimensions[:avatar][:small]).to eq({ :width => 100, :height => 100 })
     end
 
   end
@@ -162,8 +169,8 @@ describe RetinaRails::Strategies::CarrierWave do
     end
 
     it 'should not create a version' do
-      @uploader.version_exists?(:small_conditional).should be_false
-      @uploader.small_conditional.current_path.should_not be_present
+      expect(@uploader.version_exists?(:small_conditional)).to eq(false)
+      expect(@uploader.small_conditional.current_path).to_not be_present
     end
 
   end

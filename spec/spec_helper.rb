@@ -17,6 +17,7 @@ require 'carrierwave'
 require 'paperclip'
 require "paperclip/railtie"
 Paperclip::Railtie.insert
+Paperclip.options[:log] = false unless ENV["LOG_PAPERCLIP"]
 
 ## Setup fixture database for activerecord
 
