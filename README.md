@@ -140,14 +140,16 @@ If no image is uploaded (yet) it will display the default image defined with Car
 Supported Ruby Versions
 ------------
 
-This library is tested against Travis and aims to support the following Ruby
+This library is tested against Travis and aims to support the following Ruby and Rails
 implementations:
 
-* Ruby 1.9.2
-* Ruby 1.9.3
-* Ruby 2.0.0
-* Ruby 2.1.1
-* Ruby 2.1.3
+* Ruby 2.1
+* Ruby 2.2
+* Ruby 2.3
+* Ruby 2.4
+* Rails 4.2
+* Rails 5.0
+* rails 5.1
 
 Contributing
 ------------
