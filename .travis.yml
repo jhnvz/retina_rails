@@ -10,8 +10,6 @@ rvm:
   - ruby-head
 
 gemfile:
-  - gemfiles/rails-4-0.gemfile
-  - gemfiles/rails-4-1.gemfile
   - gemfiles/rails-4-2.gemfile
   - gemfiles/rails-5-0.gemfile
   - gemfiles/rails-5-1.gemfile
