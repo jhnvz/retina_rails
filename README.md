@@ -149,7 +149,7 @@ implementations:
 * Ruby 2.4
 * Rails 4.2
 * Rails 5.0
-* rails 5.1
+* Rails 5.1
 
 Contributing
 ------------
