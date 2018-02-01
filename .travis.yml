@@ -3,22 +3,28 @@ cache: bundler
 language: ruby
 sudo: false
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.7
-  - 2.2.3
+  - 2.1
+  - 2.2
+  - 2.3
+  - 2.4
   - ruby-head
 
-env:
-  - "RAILS_VERSION=3.1.12"
-  - "RAILS_VERSION=3.2.22"
-  - "RAILS_VERSION=4.0.13"
-  - "RAILS_VERSION=4.1.14"
-  - "RAILS_VERSION=4.2.5"
-  - "RAILS_VERSION=master"
+gemfile:
+  - gemfiles/rails-4-2.gemfile
+  - gemfiles/rails-5-0.gemfile
+  - gemfiles/rails-5-1.gemfile
+  - gemfiles/rails-master.gemfile
 
 matrix:
-  allow_failures:
-    - env: "RAILS_VERSION=master"
-    - rvm: ruby-head
   fast_finish: true
+  exclude:
+    - gemfile: gemfiles/rails-5-0.gemfile
+      rvm: 2.1
+    - gemfile: gemfiles/rails-5-1.gemfile
+      rvm: 2.1
+    - gemfile: gemfiles/rails-master.gemfile
+      rvm: 2.1
+  allow_failures:
+    - rvm: ruby-head
+    - gemfile: gemfiles/rails-master.gemfile
+
