@@ -163,4 +163,4 @@ Contributing
 Copyright
 ------------
 
-Copyright (c) 2012-2014 Johan van Zonneveld. See LICENSE for details.
+Copyright (c) 2018 Johan van Zonneveld. See LICENSE for details.
